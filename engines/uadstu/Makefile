@@ -12,7 +12,7 @@ LIB=$(TOP)/libcrypto.a
 
 LIBSRC= dstu_ameth.c dstu_asn1.c dstu_cipher.c dstu_compress.c dstu_engine.c dstu_key.c dstu_md.c dstu_params.c dstu_pmeth.c dstu_sign.c dstu89.c dstuhash.c
 
-LIBOBJ= dstu_ameth.o dstu_asn1.o dstu_cipher.o dstu_compress.o dstu_engine.o dstu_key.o dstu_md.o dstu_params.o dstu_pmeth.o dstu_sign.o dstu89.o dstuhash.o
+LIBOBJ= e_dstu_err.o dstu_ameth.o dstu_asn1.o dstu_cipher.o dstu_compress.o dstu_engine.o dstu_key.o dstu_md.o dstu_params.o dstu_pmeth.o dstu_sign.o dstu89.o dstuhash.o
 
 SRC=$(LIBSRC)
 
@@ -27,7 +27,7 @@ tags:
 	ctags $(SRC)
 
 errors:
-#	$(PERL) ../../util/mkerr.pl -conf gost.ec -nostatic -write $(SRC)
+	$(PERL) ../../util/mkerr.pl -conf dstu.ec -nostatic -write $(SRC)
 
 lib: $(LIBOBJ)
 	if [ -n "$(SHARED_LIBS)" ]; then \
@@ -107,7 +107,7 @@ dstu_ameth.o: ../../include/openssl/sha.h ../../include/openssl/stack.h
 dstu_ameth.o: ../../include/openssl/symhacks.h ../../include/openssl/x509.h
 dstu_ameth.o: ../../include/openssl/x509_vfy.h ../ccgost/gost89.h dstu_ameth.c
 dstu_ameth.o: dstu_asn1.h dstu_compress.h dstu_engine.h dstu_key.h
-dstu_ameth.o: dstu_params.h
+dstu_ameth.o: dstu_params.h e_dstu_err.h
 dstu_asn1.o: ../../include/openssl/asn1.h ../../include/openssl/asn1t.h
 dstu_asn1.o: ../../include/openssl/bio.h ../../include/openssl/buffer.h
 dstu_asn1.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
@@ -161,7 +161,7 @@ dstu_engine.o: ../../include/openssl/safestack.h ../../include/openssl/sha.h
 dstu_engine.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 dstu_engine.o: ../../include/openssl/x509.h ../../include/openssl/x509_vfy.h
 dstu_engine.o: ../ccgost/gost89.h dstu_asn1.h dstu_engine.c dstu_engine.h
-dstu_engine.o: dstu_params.h
+dstu_engine.o: dstu_params.h e_dstu_err.h
 dstu_key.o: ../../include/openssl/asn1.h ../../include/openssl/asn1t.h
 dstu_key.o: ../../include/openssl/bio.h ../../include/openssl/crypto.h
 dstu_key.o: ../../include/openssl/e_os2.h ../../include/openssl/ec.h

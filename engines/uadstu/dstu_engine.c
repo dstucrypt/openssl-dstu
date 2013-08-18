@@ -9,6 +9,8 @@
 #include "dstu_params.h"
 #include <openssl/objects.h>
 
+#include "e_dstu_err.h"
+
 #if 0
 static void __attribute__ ((constructor)) dstu_load(void);
 static void __attribute__ ((destructor)) dstu_unload(void);
@@ -178,29 +180,29 @@ static int dstu_ciphers(ENGINE *e, const EVP_CIPHER **cipher, const int **nids, 
 	}
 }
 
-static int bind_dstu (ENGINE *e,const char *id)
+static int bind_dstu(ENGINE *e,const char *id)
 {
 	if (id && strcmp(id, engine_dstu_id)) return 0;
 
 	if (!ENGINE_set_id(e, engine_dstu_id))
 	{
-		printf("ENGINE_set_id failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 		return 0;
 	}
 	if (!ENGINE_set_name(e, engine_dstu_name))
 	{
-		printf("ENGINE_set_name failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 		return 0;
 	}
 
 	if (!ENGINE_set_init_function(e, dstu_engine_init))
 	{
-		printf("ENGINE_set_init_function failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 		return 0;
 	}
 	if (!ENGINE_set_finish_function(e, dstu_engine_finish))
 	{
-		printf("ENGINE_set_finish_function failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 		return 0;
 	}
 	/* TODO: this will be useless for built-in engine */
@@ -215,88 +217,90 @@ static int bind_dstu (ENGINE *e,const char *id)
 	//dstu_md.pkey_type = dstu_nids[0];
 	if (!ENGINE_set_digests(e, dstu_digests))
 	{
-		printf("ENGINE_set_digests failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 		return 0;
 	}
 	if (!ENGINE_set_ciphers(e, dstu_ciphers))
 	{
-		printf("ENGINE_set_ciphers failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 		return 0;
 	}
 	if (!dstu_pkey_meth_init())
 	{
-		printf("dstu_pkey_meth_init failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, DSTU_R_PMETH_INIT_FAILED);
 		return 0;
 	}
 	if (!dstu_asn1_meth_init())
 	{
-		printf("dstu_asn1_meth_init failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, DSTU_R_AMETH_INIT_FAILED);
 		dstu_pkey_meth_finish();
 		return 0;
 	}
 	if (!ENGINE_set_pkey_meths(e, dstu_pkey_meths))
 	{
-		printf("ENGINE_set_pkey_meths failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 		dstu_asn1_meth_finish();
 		dstu_pkey_meth_finish();
 		return 0;
 	}
 	if (!ENGINE_set_pkey_asn1_meths(e, dstu_asn1_meths))
 	{
-		printf("ENGINE_set_pkey_asn1_meths failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 		dstu_asn1_meth_finish();
 		dstu_pkey_meth_finish();
 		return 0;
 	}
 	if (!ENGINE_set_flags(e, DSTU_ENGINE_FLAGS))
 	{
-		printf("ENGINE_set_flags failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 		dstu_asn1_meth_finish();
 		dstu_pkey_meth_finish();
 		return 0;
 	}
 	if (!ENGINE_register_pkey_meths(e))
 	{
-		printf("ENGINE_register_pkey_meths failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 		dstu_asn1_meth_finish();
 		dstu_pkey_meth_finish();
 		return 0;
 	}
 	if (!ENGINE_register_pkey_asn1_meths(e))
 	{
-		printf("ENGINE_register_pkey_asn1_meths failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 		dstu_asn1_meth_finish();
 		dstu_pkey_meth_finish();
 		return 0;
 	}
 	if (!ENGINE_register_digests(e))
 	{
-		printf("ENGINE_register_digests failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 		dstu_asn1_meth_finish();
 		dstu_pkey_meth_finish();
 		return 0;
 	}
 	if (!ENGINE_register_ciphers(e))
 	{
-		printf("ENGINE_register_ciphers failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 		dstu_asn1_meth_finish();
 		dstu_pkey_meth_finish();
 		return 0;
 	}
 	if (!EVP_add_digest(&dstu_md))
 	{
-		printf("EVP_add_digest failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_EVP_LIB);
 		dstu_asn1_meth_finish();
 		dstu_pkey_meth_finish();
 		return 0;
 	}
 	if (!EVP_add_cipher(&dstu_cipher))
 	{
-		printf("EVP_add_cipher failed\n");
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_EVP_LIB);
 		dstu_asn1_meth_finish();
 		dstu_pkey_meth_finish();
 		return 0;
 	}
+
+	ERR_load_DSTU_strings();
 	return 1;
 }
 
