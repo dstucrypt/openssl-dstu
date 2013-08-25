@@ -11,6 +11,9 @@
 
 #include "e_dstu_err.h"
 
+#define CURVE_PARAM_STR "curve"
+#define SBOX_PARAM_STR "sbox"
+
 /* Since we cannot access fields of EVP_PKEY_CTX to get associated methods to determine method nid later
  * we use different init callbacks for each method and store the nid in the data field of ctx
  */
@@ -130,13 +133,82 @@ err:
 
 static int dstu_pkey_ctrl(EVP_PKEY_CTX *ctx, int type, int p1, void *p2)
 {
-	/* TODO: set custom sbox and curve */
-	return 1;
+	DSTU_KEY_CTX* dstu_ctx = EVP_PKEY_CTX_get_data(ctx);
+	unsigned char *sbox = NULL;
+	EC_GROUP* group = NULL;
+
+	if (!dstu_ctx)
+	{
+		DSTUerr(DSTU_F_DSTU_PKEY_CTRL, DSTU_R_NOT_DSTU_KEY);
+		return 0;
+	}
+
+	switch (type)
+	{
+	case DSTU_SET_CUSTOM_SBOX:
+		if ((!p2) || (sizeof(default_sbox) != p1))
+			return 0;
+		sbox = copy_sbox((unsigned char *)p2);
+		if (!sbox)
+			return 0;
+
+		DSTU_KEY_CTX_set(dstu_ctx, NULL, sbox);
+		return 1;
+	case DSTU_SET_CURVE:
+		if (!p2)
+			return 0;
+
+		group = EC_GROUP_dup((EC_GROUP*)p2);
+		if (!group)
+			return 0;
+
+		DSTU_KEY_CTX_set(dstu_ctx, group, NULL);
+		return 1;
+	}
+	return 0;
 }
 
 static int dstu_pkey_ctrl_str(EVP_PKEY_CTX *ctx, const char *type, const char *value)
 {
-	return 1;
+	int curve_nid = NID_undef, res = 0;
+	EC_GROUP* group = NULL;
+	unsigned char sbox[sizeof(default_sbox)];
+	BIGNUM* tmp = NULL;
+
+	if (!strcmp(CURVE_PARAM_STR, type))
+	{
+		curve_nid = OBJ_sn2nid(value);
+		if (NID_undef == curve_nid)
+			return 0;
+
+		group = group_from_nid(curve_nid);
+		if (group)
+		{
+			res = dstu_pkey_ctrl(ctx, DSTU_SET_CURVE, 0, group);
+			EC_GROUP_free(group);
+		}
+		return res;
+	}
+
+	if (!strcmp(SBOX_PARAM_STR, type))
+	{
+		tmp = BN_new();
+		if (!tmp)
+			return 0;
+
+		if ((sizeof(default_sbox) * 2) != BN_hex2bn(&tmp, value))
+		{
+			BN_free(tmp);
+			return 0;
+		}
+
+		if (sizeof(sbox) == BN_bn2bin(tmp, sbox))
+			res = dstu_pkey_ctrl(ctx, DSTU_SET_CUSTOM_SBOX, sizeof(sbox), sbox);
+		BN_free(tmp);
+		return res;
+	}
+
+	return 0;
 }
 
 /*static int dstu_pkey_sign_init(EVP_PKEY_CTX *ctx)
