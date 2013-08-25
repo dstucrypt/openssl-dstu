@@ -84,6 +84,7 @@ void ERR_DSTU_error(int function, int reason, char *file, int line);
 #define DSTU_F_DSTU_ASN1_PUB_ENCODE			 108
 #define DSTU_F_DSTU_DO_SIGN				 109
 #define DSTU_F_DSTU_DO_VERIFY				 110
+#define DSTU_F_DSTU_PKEY_CTRL				 116
 #define DSTU_F_DSTU_PKEY_INIT_BE			 111
 #define DSTU_F_DSTU_PKEY_INIT_LE			 112
 #define DSTU_F_DSTU_PKEY_KEYGEN				 113
