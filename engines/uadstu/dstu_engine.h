@@ -33,6 +33,9 @@ int dstu_do_verify(const EC_KEY* key, const unsigned char *tbs, size_t tbslen, c
 extern EVP_MD dstu_md;
 
 extern EVP_CIPHER dstu_cipher;
-void test_cipher(void);
+
+/* This ctrl command to set custom sbox for MD and CIPHER */
+/* p2 should point to char array of 64 bytes (packed format, see default_sbox), p1 should be set to size of the array (64) */
+#define DSTU_SET_CUSTOM_SBOX (EVP_MD_CTRL_ALG_CTRL + 1)
 
 #endif /* DSTU_ENGINE_H_ */

@@ -9,15 +9,20 @@
 #include "dstu_params.h"
 #include <openssl/asn1.h>
 
+#include "e_dstu_err.h"
+
 /* Since we cannot access fields of EVP_PKEY_CTX to get associated methods to determine method nid later
  * we use different init callbacks for each method and store the nid in the data field of ctx
  */
 static int dstu_pkey_init_le(EVP_PKEY_CTX *ctx)
 {
 	DSTU_KEY_CTX* dstu_ctx = DSTU_KEY_CTX_new();
-printf("dstu_pkey_init_le\n");
+
 	if (!dstu_ctx)
+	{
+		DSTUerr(DSTU_F_DSTU_PKEY_INIT_LE, ERR_R_MALLOC_FAILURE);
 		return 0;
+	}
 
 	dstu_ctx->type = dstu_nids[0];
 	EVP_PKEY_CTX_set_data(ctx, dstu_ctx);
@@ -27,9 +32,12 @@ printf("dstu_pkey_init_le\n");
 static int dstu_pkey_init_be(EVP_PKEY_CTX *ctx)
 {
 	DSTU_KEY_CTX* dstu_ctx = DSTU_KEY_CTX_new();
-	printf("dstu_pkey_init_be %p %p\n", dstu_ctx, dstu_ctx->group);
+
 	if (!dstu_ctx)
+	{
+		DSTUerr(DSTU_F_DSTU_PKEY_INIT_BE, ERR_R_MALLOC_FAILURE);
 		return 0;
+	}
 
 	dstu_ctx->type = dstu_nids[1];
 	EVP_PKEY_CTX_set_data(ctx, dstu_ctx);
@@ -39,7 +47,7 @@ static int dstu_pkey_init_be(EVP_PKEY_CTX *ctx)
 static void dstu_pkey_cleanup(EVP_PKEY_CTX *ctx)
 {
 	DSTU_KEY_CTX* dstu_ctx = EVP_PKEY_CTX_get_data(ctx);
-	printf("dstu_pkey_cleanup %p %p\n", dstu_ctx, dstu_ctx->group);
+
 	if (dstu_ctx)
 	{
 		DSTU_KEY_CTX_free(dstu_ctx);
@@ -72,9 +80,13 @@ static int dstu_pkey_keygen(EVP_PKEY_CTX *ctx, EVP_PKEY *pkey)
 	DSTU_KEY_CTX* dstu_ctx = EVP_PKEY_CTX_get_data(ctx);
 	unsigned char* sbox = NULL;
 	int ret = 0;
+
 	if (!dstu_ctx)
+	{
+		DSTUerr(DSTU_F_DSTU_PKEY_KEYGEN, DSTU_R_NOT_DSTU_KEY);
 		return 0;
-	printf("dstu_pkey_keygen\n");
+	}
+
 	if (!(dstu_ctx->group))
 	{
 		dstu_ctx->group = get_default_group();
@@ -118,16 +130,12 @@ err:
 
 static int dstu_pkey_ctrl(EVP_PKEY_CTX *ctx, int type, int p1, void *p2)
 {
-	printf("dstu_pkey_ctrl\n");
 	/* TODO: set custom sbox and curve */
 	return 1;
 }
 
 static int dstu_pkey_ctrl_str(EVP_PKEY_CTX *ctx, const char *type, const char *value)
 {
-	printf("dstu_pkey_ctrl_str\n");
-	printf("%s: %s\n", type, value);
-	/*test_cipher();*/
 	return 1;
 }
 
@@ -144,17 +152,26 @@ static int dstu_pkey_sign(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen,
 	int field_size, ret = 0, encoded_sig_size;
 	ASN1_OCTET_STRING *dstu_sig = NULL;
 	unsigned char *sig_data = NULL;
-	printf("dstu_pkey_sign %p %d\n", sig, *siglen);
+
 	if (!pkey)
+	{
+		DSTUerr(DSTU_F_DSTU_PKEY_SIGN, DSTU_R_NOT_DSTU_KEY);
 		return 0;
+	}
 
 	key = EVP_PKEY_get0(pkey);
 	if (!key)
+	{
+		DSTUerr(DSTU_F_DSTU_PKEY_SIGN, DSTU_R_NOT_DSTU_KEY);
 		return 0;
+	}
 
 	group = EC_KEY_get0_group(key->ec);
 	if (!group)
+	{
+		DSTUerr(DSTU_F_DSTU_PKEY_SIGN, DSTU_R_NOT_DSTU_KEY);
 		return 0;
+	}
 
 	field_size = (EC_GROUP_get_degree(group) + 7) / 8;
 	encoded_sig_size = EVP_PKEY_size(pkey);
@@ -215,17 +232,26 @@ static int dstu_pkey_verify(EVP_PKEY_CTX *ctx, const unsigned char *sig, size_t 
 	int field_size, ret = 0;
 	unsigned char *sig_be;
 	ASN1_OCTET_STRING *dstu_sig = NULL;
-	printf("dstu_pkey_verify\n");
+
 	if (!pkey)
+	{
+		DSTUerr(DSTU_F_DSTU_PKEY_VERIFY, DSTU_R_NOT_DSTU_KEY);
 		return 0;
+	}
 
 	key = EVP_PKEY_get0(pkey);
 	if (!key)
+	{
+		DSTUerr(DSTU_F_DSTU_PKEY_VERIFY, DSTU_R_NOT_DSTU_KEY);
 		return 0;
+	}
 
 	group = EC_KEY_get0_group(key->ec);
 	if (!group)
+	{
+		DSTUerr(DSTU_F_DSTU_PKEY_VERIFY, DSTU_R_NOT_DSTU_KEY);
 		return 0;
+	}
 
 	field_size = (EC_GROUP_get_degree(group) + 7) / 8;
 
@@ -265,7 +291,6 @@ err:
 static int dstu_pkey_copy(EVP_PKEY_CTX *dst, EVP_PKEY_CTX *src)
 {
 	DSTU_KEY_CTX *dstu_src_ctx = EVP_PKEY_CTX_get_data(src), *dstu_dst_ctx;
-	printf("dstu_pkey_copy %p %p\n", dstu_src_ctx, dstu_src_ctx->group);
 
 	if (dstu_src_ctx)
 	{
@@ -273,7 +298,6 @@ static int dstu_pkey_copy(EVP_PKEY_CTX *dst, EVP_PKEY_CTX *src)
 		if (!dstu_dst_ctx)
 			return 0;
 		EVP_PKEY_CTX_set_data(dst, dstu_dst_ctx);
-		printf("dstu_pkey_copy2 %p %p\n", dstu_dst_ctx, dstu_dst_ctx->group);
 	}
 
 	return 1;

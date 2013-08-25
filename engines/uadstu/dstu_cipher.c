@@ -10,11 +10,7 @@
 #include "gost89.h"
 
 /* DSTU uses Russian GOST 28147 but with different s-boxes and no key meshing */
-
-struct dstu_cipher_ctx
-{
-	gost_ctx ctx;
-};
+/* We implement CFB mode here because it is mostly used */
 
 #define DSTU_CIPHER_BLOCK_SIZE 8
 
@@ -22,8 +18,6 @@ static int dstu_cipher_init(EVP_CIPHER_CTX *ctx, const unsigned char *key, const
 {
 	gost_subst_block sbox;
 	gost_ctx* gctx = ctx->cipher_data;
-
-	printf("dstu_cipher_init\n");
 
 	unpack_sbox(default_sbox, &sbox);
 	gost_init(gctx, &sbox);
@@ -36,13 +30,11 @@ static int dstu_cipher_init(EVP_CIPHER_CTX *ctx, const unsigned char *key, const
 	return 1;
 }
 
-static int dstu_cipher_do_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,	 const unsigned char *in, size_t inl)
+static int dstu_cipher_do_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out, const unsigned char *in, size_t inl)
 {
 	size_t to_use, i, blocks;
 	gost_ctx* gctx = ctx->cipher_data;
 	unsigned char tmpiv[DSTU_CIPHER_BLOCK_SIZE];
-
-	printf("dstu_cipher_do_cipher %d\n", inl);
 
 	if (!inl)
 		return 1;
@@ -115,14 +107,26 @@ static int dstu_cipher_do_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,	 const
 
 static int dstu_cipher_cleanup(EVP_CIPHER_CTX *ctx)
 {
-	printf("dstu_cipher_cleanup\n");
-
 	return 1;
 }
 
-static int dstu_cipher_ctrl(EVP_CIPHER_CTX *ctx, int type, int arg, void *ptr)
+static int dstu_cipher_ctrl(EVP_CIPHER_CTX *ctx, int cmd, int p1, void *p2)
 {
-	printf("dstu_cipher_ctrl\n");
+	gost_subst_block sbox;
+	gost_ctx* gctx = ctx->cipher_data;
+
+	switch (cmd)
+	{
+	case DSTU_SET_CUSTOM_SBOX:
+		if ((!p2) || (sizeof(default_sbox) != p1))
+			return 0;
+		unpack_sbox((unsigned char *)p2, &sbox);
+		gost_init(gctx, &sbox);
+		memcpy(ctx->iv, ctx->oiv, DSTU_CIPHER_BLOCK_SIZE);
+		gostcrypt(gctx, ctx->iv, ctx->buf);
+		return 1;
+	}
+
 	return 0;
 }
 

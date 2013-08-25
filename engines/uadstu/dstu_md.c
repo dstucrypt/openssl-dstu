@@ -79,6 +79,24 @@ static int dstu_md_cleanup(EVP_MD_CTX *ctx)
 	return 1;
 }
 
+static int dstu_md_ctrl(EVP_MD_CTX *ctx, int cmd, int p1, void *p2)
+{
+	gost_subst_block sbox;
+	struct dstu_digest_ctx *c = ctx->md_data;
+
+	switch (cmd)
+	{
+	case DSTU_SET_CUSTOM_SBOX:
+		if ((!p2) || (sizeof(default_sbox) != p1))
+			return 0;
+		unpack_sbox((unsigned char *)p2, &sbox);
+		gost_init(&(c->cctx),&sbox);
+		return 1;
+	}
+
+	return 0;
+}
+
 EVP_MD dstu_md =
 {
 	0,
@@ -95,5 +113,5 @@ EVP_MD dstu_md =
 	{0, 0, 0, 0, 0},
 	32,
 	sizeof(struct dstu_digest_ctx),
-	NULL /*int (*md_ctrl)(EVP_MD_CTX *ctx, int cmd, int p1, void *p2);*/
+	dstu_md_ctrl
 };
