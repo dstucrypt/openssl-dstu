@@ -146,22 +146,21 @@ dstu_compress.o: ../../include/openssl/safestack.h
 dstu_compress.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 dstu_compress.o: ../ccgost/gost89.h dstu_compress.c dstu_compress.h
 dstu_compress.o: dstu_params.h
-dstu_engine.o: ../../include/openssl/asn1.h ../../include/openssl/asn1t.h
-dstu_engine.o: ../../include/openssl/bio.h ../../include/openssl/buffer.h
-dstu_engine.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
-dstu_engine.o: ../../include/openssl/ec.h ../../include/openssl/ecdh.h
-dstu_engine.o: ../../include/openssl/ecdsa.h ../../include/openssl/engine.h
-dstu_engine.o: ../../include/openssl/err.h ../../include/openssl/evp.h
-dstu_engine.o: ../../include/openssl/lhash.h ../../include/openssl/obj_mac.h
-dstu_engine.o: ../../include/openssl/objects.h
+dstu_engine.o: ../../include/openssl/asn1.h ../../include/openssl/bio.h
+dstu_engine.o: ../../include/openssl/buffer.h ../../include/openssl/crypto.h
+dstu_engine.o: ../../include/openssl/e_os2.h ../../include/openssl/ec.h
+dstu_engine.o: ../../include/openssl/ecdh.h ../../include/openssl/ecdsa.h
+dstu_engine.o: ../../include/openssl/engine.h ../../include/openssl/err.h
+dstu_engine.o: ../../include/openssl/evp.h ../../include/openssl/lhash.h
+dstu_engine.o: ../../include/openssl/obj_mac.h ../../include/openssl/objects.h
 dstu_engine.o: ../../include/openssl/opensslconf.h
 dstu_engine.o: ../../include/openssl/opensslv.h
 dstu_engine.o: ../../include/openssl/ossl_typ.h ../../include/openssl/pkcs7.h
 dstu_engine.o: ../../include/openssl/safestack.h ../../include/openssl/sha.h
 dstu_engine.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 dstu_engine.o: ../../include/openssl/x509.h ../../include/openssl/x509_vfy.h
-dstu_engine.o: ../ccgost/gost89.h dstu_asn1.h dstu_engine.c dstu_engine.h
-dstu_engine.o: dstu_params.h e_dstu_err.h
+dstu_engine.o: ../ccgost/gost89.h dstu_engine.c dstu_engine.h dstu_params.h
+dstu_engine.o: e_dstu_err.h
 dstu_key.o: ../../include/openssl/asn1.h ../../include/openssl/asn1t.h
 dstu_key.o: ../../include/openssl/bio.h ../../include/openssl/crypto.h
 dstu_key.o: ../../include/openssl/e_os2.h ../../include/openssl/ec.h
@@ -210,7 +209,7 @@ dstu_pmeth.o: ../../include/openssl/pkcs7.h ../../include/openssl/safestack.h
 dstu_pmeth.o: ../../include/openssl/sha.h ../../include/openssl/stack.h
 dstu_pmeth.o: ../../include/openssl/symhacks.h ../../include/openssl/x509.h
 dstu_pmeth.o: ../../include/openssl/x509_vfy.h ../ccgost/gost89.h dstu_asn1.h
-dstu_pmeth.o: dstu_engine.h dstu_key.h dstu_params.h dstu_pmeth.c
+dstu_pmeth.o: dstu_engine.h dstu_key.h dstu_params.h dstu_pmeth.c e_dstu_err.h
 dstu_sign.o: ../../include/openssl/asn1.h ../../include/openssl/bio.h
 dstu_sign.o: ../../include/openssl/bn.h ../../include/openssl/buffer.h
 dstu_sign.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
@@ -225,6 +224,6 @@ dstu_sign.o: ../../include/openssl/pkcs7.h ../../include/openssl/safestack.h
 dstu_sign.o: ../../include/openssl/sha.h ../../include/openssl/stack.h
 dstu_sign.o: ../../include/openssl/symhacks.h ../../include/openssl/x509.h
 dstu_sign.o: ../../include/openssl/x509_vfy.h ../ccgost/gost89.h dstu_engine.h
-dstu_sign.o: dstu_params.h dstu_sign.c
+dstu_sign.o: dstu_params.h dstu_sign.c e_dstu_err.h
 dstuhash.o: ../ccgost/gost89.h ../ccgost/gosthash.c ../ccgost/gosthash.h
 dstuhash.o: dstuhash.c

@@ -11,28 +11,6 @@
 
 #include "e_dstu_err.h"
 
-#if 0
-static void __attribute__ ((constructor)) dstu_load(void);
-static void __attribute__ ((destructor)) dstu_unload(void);
-static void dstu_load(void)
-{
-	//CRYPTO_mem_leaks_fp(stderr);
-	//MemCheck_stop();
-	//CRYPTO_set_mem_debug_functions(0, 0, 0, 0, 0);
-}
-
-static void dstu_unload(void)
-{
-	//MemCheck_stop();
-	//OPENSSL_malloc(2048);
-	//printf("%d\n", CRYPTO_remove_all_info());
-	//printf("test2\n");
-	//CRYPTO_mem_leaks_fp(stderr);
-	//OPENSSL_malloc(10);
-}
-#endif /* #if 0*/
-
-
 static const char *engine_dstu_id = "dstu";
 static const char *engine_dstu_name = "Reference implementation of DSTU engine";
 
@@ -118,23 +96,11 @@ static int dstu_asn1_meths(ENGINE *e, EVP_PKEY_ASN1_METHOD **ameth, const int **
 
 static int dstu_engine_init(ENGINE *e)
 {
-#ifdef CRYPTO_MDEBUG
-	printf("dstu_init...\n");
-	//MemCheck_start();
-#endif
 	return 1;
 }
 
-#include "dstu_asn1.h"
 static int dstu_engine_finish(ENGINE *e)
 {
-	//dstu_asn1_meth_finish();
-	//dstu_pkey_meth_finish();
-#ifdef CRYPTO_MDEBUG
-	//CRYPTO_mem_leaks_fp(stderr);
-	//MemCheck_stop();
-	printf("dstu_finish...\n");
-#endif
 	return 1;
 }
 

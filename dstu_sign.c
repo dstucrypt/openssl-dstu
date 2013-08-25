@@ -10,6 +10,8 @@
 #include "dstu_engine.h"
 #include "dstu_params.h"
 
+#include "e_dstu_err.h"
+
 static int bn_truncate_bits(BIGNUM* bn, int bitsize)
 {
 	int num_bits = BN_num_bits(bn);
@@ -61,6 +63,13 @@ int dstu_do_sign(const EC_KEY* key, const unsigned char *tbs, size_t tbslen, uns
 
 	if (!d || !group)
 		return 0;
+
+	/* DSTU supports only binary fields */
+	if (NID_X9_62_characteristic_two_field != EC_METHOD_get_field_type(EC_GROUP_method_of(group)))
+	{
+		DSTUerr(DSTU_F_DSTU_DO_SIGN, DSTU_R_INCORRECT_FIELD_TYPE);
+		return 0;
+	}
 
 	field_size = (EC_GROUP_get_degree(group) + 7) / 8;
 
@@ -155,6 +164,13 @@ int dstu_do_verify(const EC_KEY* key, const unsigned char *tbs, size_t tbslen, c
 
 	if (!group || !Q)
 		return 0;
+
+	/* DSTU supports only binary fields */
+	if (NID_X9_62_characteristic_two_field != EC_METHOD_get_field_type(EC_GROUP_method_of(group)))
+	{
+		DSTUerr(DSTU_F_DSTU_DO_VERIFY, DSTU_R_INCORRECT_FIELD_TYPE);
+		return 0;
+	}
 
 	ctx = BN_CTX_new();
 	if (!ctx)
