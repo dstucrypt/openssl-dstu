@@ -1,7 +1,7 @@
 DIR=uadstu
 TOP=../..
 CC=cc
-INCLUDES= -I../../include -I../ccgost
+INCLUDES= -I../../include
 CFLAG=-g
 MAKEFILE= Makefile
 AR= ar r

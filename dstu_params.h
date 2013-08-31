@@ -9,7 +9,7 @@
 #define DSTU_PARAMS_H_
 
 #include <openssl/ec.h>
-#include "gost89.h"
+#include "../ccgost/gost89.h"
 
 #define DEFAULT_CURVE 6
 #define get_default_group() group_from_named_curve(DEFAULT_CURVE)

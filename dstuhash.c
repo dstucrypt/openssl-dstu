@@ -5,6 +5,6 @@
  *      Author: ignat
  */
 
-#include "gosthash.h"
+#include "../ccgost/gosthash.h"
 
 #include "../ccgost/gosthash.c"

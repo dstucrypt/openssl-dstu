@@ -8,7 +8,7 @@
 #include "dstu_engine.h"
 #include "dstu_params.h"
 #include "dstu_key.h"
-#include "gosthash.h"
+#include "../ccgost/gosthash.h"
 
 struct dstu_digest_ctx
 {
