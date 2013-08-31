@@ -202,7 +202,13 @@ static int dstu_pkey_ctrl_str(EVP_PKEY_CTX *ctx, const char *type, const char *v
 			return 0;
 		}
 
-		if (sizeof(sbox) == BN_bn2bin(tmp, sbox))
+		if (BN_is_negative(tmp))
+		{
+			BN_free(tmp);
+			return 0;
+		}
+
+		if (bn_encode(tmp, sbox, sizeof(sbox)))
 			res = dstu_pkey_ctrl(ctx, DSTU_SET_CUSTOM_SBOX, sizeof(sbox), sbox);
 		BN_free(tmp);
 		return res;

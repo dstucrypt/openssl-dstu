@@ -415,7 +415,7 @@ EC_GROUP* group_from_named_curve(int curve_num)
 	if (!Py)
 		goto err;
 
-	if (!BN_GF2m_arr2poly(dstu_curves[6].poly, p))
+	if (!BN_GF2m_arr2poly(dstu_curves[curve_num].poly, p))
 		goto err;
 
 	if (*data)

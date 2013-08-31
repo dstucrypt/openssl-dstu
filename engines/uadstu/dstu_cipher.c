@@ -7,7 +7,7 @@
 
 #include "dstu_engine.h"
 #include "dstu_params.h"
-#include "gost89.h"
+#include "../ccgost/gost89.h"
 
 /* DSTU uses Russian GOST 28147 but with different s-boxes and no key meshing */
 /* We implement CFB mode here because it is mostly used */

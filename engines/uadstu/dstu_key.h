@@ -9,7 +9,7 @@
 #define DSTU_KEY_H_
 
 #include <openssl/ec.h>
-#include "gost89.h"
+#include "../ccgost/gost89.h"
 #include "dstu_asn1.h"
 
 typedef struct dstu_key_st
