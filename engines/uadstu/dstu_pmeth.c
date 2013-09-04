@@ -164,6 +164,15 @@ static int dstu_pkey_ctrl(EVP_PKEY_CTX *ctx, int type, int p1, void *p2)
 
 		DSTU_KEY_CTX_set(dstu_ctx, group, NULL);
 		return 1;
+	case EVP_PKEY_CTRL_MD:
+		if (DSTU_MD_NID != EVP_MD_type((const EVP_MD *)p2))
+		{
+			DSTUerr(DSTU_F_DSTU_PKEY_CTRL, DSTU_R_INVALID_DIGEST_TYPE);
+			return 0;
+		}
+		return 1;
+	case EVP_PKEY_CTRL_DIGESTINIT:
+		return 1;
 	}
 	return 0;
 }

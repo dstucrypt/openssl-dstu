@@ -96,6 +96,7 @@ static ERR_STRING_DATA DSTU_str_reasons[]=
 {ERR_REASON(DSTU_R_ASN1_PARAMETER_ENCODE_FAILED),"asn1 parameter encode failed"},
 {ERR_REASON(DSTU_R_INCORRECT_FIELD_TYPE) ,"incorrect field type"},
 {ERR_REASON(DSTU_R_INVALID_ASN1_PARAMETERS),"invalid asn1 parameters"},
+{ERR_REASON(DSTU_R_INVALID_DIGEST_TYPE)  ,"invalid digest type"},
 {ERR_REASON(DSTU_R_NOT_DSTU_KEY)         ,"not dstu key"},
 {ERR_REASON(DSTU_R_PMETH_INIT_FAILED)    ,"pmeth init failed"},
 {ERR_REASON(DSTU_R_POINT_COMPRESS_FAILED),"point compress failed"},

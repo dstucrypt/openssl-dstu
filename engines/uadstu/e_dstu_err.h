@@ -96,6 +96,7 @@ void ERR_DSTU_error(int function, int reason, char *file, int line);
 #define DSTU_R_ASN1_PARAMETER_ENCODE_FAILED		 103
 #define DSTU_R_INCORRECT_FIELD_TYPE			 107
 #define DSTU_R_INVALID_ASN1_PARAMETERS			 102
+#define DSTU_R_INVALID_DIGEST_TYPE			 108
 #define DSTU_R_NOT_DSTU_KEY				 104
 #define DSTU_R_PMETH_INIT_FAILED			 101
 #define DSTU_R_POINT_COMPRESS_FAILED			 105
