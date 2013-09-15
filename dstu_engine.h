@@ -16,9 +16,9 @@
 #include <openssl/obj_mac.h>
 
 /* TODO: Replace this nid for actual one in obj_mac.h */
-extern int dstu_nids[2];
+/*extern int dstu_nids[2];
 extern int DSTU_MD_NID;
-extern int DSTU_CIPHER_NID;
+extern int DSTU_CIPHER_NID;*/
 extern EVP_PKEY_METHOD *dstu_pkey_meth_le, *dstu_pkey_meth_be;
 int dstu_pkey_meth_init(void);
 void dstu_pkey_meth_finish(void);

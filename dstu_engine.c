@@ -15,7 +15,7 @@ static const char *engine_dstu_id = "dstu";
 static const char *engine_dstu_name = "Reference implementation of DSTU engine";
 
 /* First is little-endian DSTU and second is big-endian DSTU*/
-int dstu_nids[2];
+/*int dstu_nids[2];
 int DSTU_MD_NID = 0;
 int DSTU_CIPHER_NID = 0;
 
@@ -42,7 +42,11 @@ static int create_dstu_nid()
 	}
 
 	return dstu_nids[0] && dstu_nids[1] && DSTU_MD_NID && DSTU_CIPHER_NID;
-}
+}*/
+
+static int dstu_nids[] = { NID_dstu4145le, NID_dstu4145be };
+static int digest_nids[] = { NID_dstu34311 };
+static int cipher_nids[] = { NID_dstu28147_cfb };
 
 static const int DSTU_ENGINE_FLAGS = ENGINE_METHOD_PKEY_METHS | ENGINE_METHOD_PKEY_ASN1_METHS | ENGINE_METHOD_DIGESTS | ENGINE_METHOD_CIPHERS;
 
@@ -108,7 +112,7 @@ static int dstu_digests(ENGINE *e, const EVP_MD **digest, const int **nids, int 
 {
 	if (digest && nid)
 	{
-		if (DSTU_MD_NID == nid)
+		if (NID_dstu34311 == nid)
 		{
 			*digest = &dstu_md;
 			return 1;
@@ -120,7 +124,7 @@ static int dstu_digests(ENGINE *e, const EVP_MD **digest, const int **nids, int 
 	{
 		if (!nids)
 			return -1;
-		*nids = &DSTU_MD_NID;
+		*nids = digest_nids;
 		return 1;
 	}
 }
@@ -129,7 +133,7 @@ static int dstu_ciphers(ENGINE *e, const EVP_CIPHER **cipher, const int **nids, 
 {
 	if (cipher && nid)
 	{
-		if (DSTU_CIPHER_NID == nid)
+		if (NID_dstu28147_cfb == nid)
 		{
 			*cipher = &dstu_cipher;
 			return 1;
@@ -141,7 +145,7 @@ static int dstu_ciphers(ENGINE *e, const EVP_CIPHER **cipher, const int **nids, 
 	{
 		if (!nids)
 			return -1;
-		*nids = &DSTU_CIPHER_NID;
+		*nids = cipher_nids;
 		return 1;
 	}
 }
@@ -172,14 +176,14 @@ static int bind_dstu(ENGINE *e,const char *id)
 		return 0;
 	}
 	/* TODO: this will be useless for built-in engine */
-	if (!create_dstu_nid())
+	/*if (!create_dstu_nid())
 	{
 		printf("create_dstu_nid failed\n");
 		return 0;
-	}
+	}*/
 	/* TODO: Move this to MD declaration, when we are built-in engine */
-	dstu_md.type = DSTU_MD_NID;
-	dstu_cipher.nid = DSTU_CIPHER_NID;
+	//dstu_md.type = DSTU_MD_NID;
+	//dstu_cipher.nid = DSTU_CIPHER_NID;
 	//dstu_md.pkey_type = dstu_nids[0];
 	if (!ENGINE_set_digests(e, dstu_digests))
 	{

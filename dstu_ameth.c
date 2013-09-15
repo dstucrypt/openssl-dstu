@@ -26,7 +26,7 @@ static int dstu_asn1_param_decode(EVP_PKEY *pkey, const unsigned char **pder, in
 
 	type = EVP_PKEY_id(pkey);
 
-	key = key_from_asn1(params, dstu_nids[0] == type);
+	key = key_from_asn1(params, NID_dstu4145le == type);
 	if (!key)
 	{
 		DSTUerr(DSTU_F_DSTU_ASN1_PARAM_DECODE, DSTU_R_INVALID_ASN1_PARAMETERS);
@@ -60,7 +60,7 @@ static int dstu_asn1_param_encode(const EVP_PKEY *pkey, unsigned char **pder)
 	if (!key)
 		return 0;
 
-	params = asn1_from_key(key, dstu_nids[0] == type);
+	params = asn1_from_key(key, NID_dstu4145le == type);
 	if (!params)
 	{
 		DSTUerr(DSTU_F_DSTU_ASN1_PARAM_ENCODE, DSTU_R_ASN1_PARAMETER_ENCODE_FAILED);
@@ -189,7 +189,7 @@ static int dstu_asn1_priv_decode(EVP_PKEY *pk, PKCS8_PRIV_KEY_INFO *p8)
 
 	algnid = OBJ_obj2nid(algoid);
 
-	if ((algnid == dstu_nids[0]) || (algnid == dstu_nids[1]))
+	if ((algnid == NID_dstu4145le) || (algnid == NID_dstu4145be))
 	{
 		if (!EVP_PKEY_set_type(pk, algnid))
 		{
@@ -269,7 +269,7 @@ static int dstu_asn1_priv_encode(PKCS8_PRIV_KEY_INFO *p8, const EVP_PKEY *pk)
 	const BIGNUM *d;
 	ASN1_STRING *params;
 
-	if ((algnid != dstu_nids[0]) && (algnid != dstu_nids[1]))
+	if ((algnid != NID_dstu4145le) && (algnid != NID_dstu4145be))
 	{
 		DSTUerr(DSTU_F_DSTU_ASN1_PRIV_ENCODE, DSTU_R_NOT_DSTU_KEY);
 		return 0;
@@ -394,7 +394,7 @@ static int dstu_asn1_pub_decode(EVP_PKEY *pk, X509_PUBKEY *pub)
 
 	algnid = OBJ_obj2nid(algoid);
 
-	if ((algnid == dstu_nids[0]) || (algnid == dstu_nids[1]))
+	if ((algnid == NID_dstu4145le) || (algnid == NID_dstu4145be))
 	{
 		if (!EVP_PKEY_set_type(pk, algnid))
 		{
@@ -439,7 +439,7 @@ static int dstu_asn1_pub_decode(EVP_PKEY *pk, X509_PUBKEY *pub)
 		goto err;
 	}
 
-	if (algnid == dstu_nids[0])
+	if (algnid == NID_dstu4145le)
 	{
 		compressed = OPENSSL_malloc(ASN1_STRING_length(public_key));
 		if (!compressed)
@@ -490,7 +490,7 @@ static int dstu_asn1_pub_encode(X509_PUBKEY *pub, const EVP_PKEY *pk)
 	ASN1_STRING *params;
 	const EC_POINT* point = NULL;
 
-	if ((algnid != dstu_nids[0]) && (algnid != dstu_nids[1]))
+	if ((algnid != NID_dstu4145le) && (algnid != NID_dstu4145be))
 	{
 		DSTUerr(DSTU_F_DSTU_ASN1_PUB_ENCODE, DSTU_R_NOT_DSTU_KEY);
 		return 0;
@@ -549,7 +549,7 @@ static int dstu_asn1_pub_encode(X509_PUBKEY *pub, const EVP_PKEY *pk)
 		goto err;
 	}
 
-	if (algnid == dstu_nids[0])
+	if (algnid == NID_dstu4145le)
 		reverse_bytes(compressed, field_size);
 
 	public_key = ASN1_OCTET_STRING_new();
@@ -617,7 +617,7 @@ static int dstu_asn1_pkey_ctrl(EVP_PKEY *pkey, int op, long arg1, void *arg2)
 	switch (op)
 	{
 	case ASN1_PKEY_CTRL_DEFAULT_MD_NID:
-		*((int *)arg2) = DSTU_MD_NID;
+		*((int *)arg2) = NID_dstu34311;
 		return 2;
 	}
 
@@ -662,11 +662,11 @@ EVP_PKEY_ASN1_METHOD *dstu_asn1_meth_le = NULL, *dstu_asn1_meth_be = NULL;
 
 int dstu_asn1_meth_init(void)
 {
-	dstu_asn1_meth_le = EVP_PKEY_asn1_new(dstu_nids[0], 0, "dstu4145le", "DSTU-4145-2002 little endian");
+	dstu_asn1_meth_le = EVP_PKEY_asn1_new(NID_dstu4145le, 0, SN_dstu4145le, LN_dstu4145le);
 	if (!dstu_asn1_meth_le)
 		return 0;
 
-	dstu_asn1_meth_be = EVP_PKEY_asn1_new(dstu_nids[1], 0, "dstu4145be", "DSTU-4145-2002 big endian");
+	dstu_asn1_meth_be = EVP_PKEY_asn1_new(NID_dstu4145be, 0, SN_dstu4145be, LN_dstu4145be);
 	if (!dstu_asn1_meth_be)
 	{
 		EVP_PKEY_asn1_free(dstu_asn1_meth_le);
@@ -674,7 +674,7 @@ int dstu_asn1_meth_init(void)
 		return 0;
 	}
 
-	if (!OBJ_add_sigid(dstu_nids[0], DSTU_MD_NID, dstu_nids[0]))
+	/*if (!OBJ_add_sigid(dstu_nids[0], DSTU_MD_NID, dstu_nids[0]))
 	{
 		EVP_PKEY_asn1_free(dstu_asn1_meth_le);
 		EVP_PKEY_asn1_free(dstu_asn1_meth_be);
@@ -686,7 +686,7 @@ int dstu_asn1_meth_init(void)
 		EVP_PKEY_asn1_free(dstu_asn1_meth_le);
 		EVP_PKEY_asn1_free(dstu_asn1_meth_be);
 		return 0;
-	}
+	}*/
 
 	EVP_PKEY_asn1_set_param(dstu_asn1_meth_le, dstu_asn1_param_decode, dstu_asn1_param_encode, /*dstu_asn1_param_missing*/ NULL, dstu_asn1_param_copy, dstu_asn1_param_cmp, dstu_asn1_param_print);
 	EVP_PKEY_asn1_set_private(dstu_asn1_meth_le, dstu_asn1_priv_decode, dstu_asn1_priv_encode, dstu_asn1_priv_print);

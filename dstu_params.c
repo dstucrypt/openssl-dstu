@@ -269,52 +269,52 @@ static unsigned char data431[] =
 DSTU_NAMED_CURVE dstu_curves[] =
 {
 	{
-		0,
+		NID_uacurve0,
 		{163, 7, 6, 3, 0, -1},
 		data163
 	},
 	{
-		0,
+		NID_uacurve1,
 		{167, 6, 0, -1, 0, 0},
 		data167
 	},
 	{
-		0,
+		NID_uacurve2,
 		{173, 10, 2, 1, 0, -1},
 		data173
 	},
 	{
-		0,
+		NID_uacurve3,
 		{179, 4, 2, 1, 0, -1},
 		data179
 	},
 	{
-		0,
+		NID_uacurve4,
 		{191, 9, 0, -1, 0, 0},
 		data191
 	},
 	{
-		0,
+		NID_uacurve5,
 		{233, 9, 4, 1, 0, -1},
 		data233
 	},
 	{
-		0,
+		NID_uacurve6,
 		{257, 12, 0, -1, 0, 0},
 		data257
 	},
 	{
-		0,
+		NID_uacurve7,
 		{307, 8, 4, 2, 0, -1},
 		data307
 	},
 	{
-		0,
+		NID_uacurve8,
 		{367, 21, 0, -1, 0, 0},
 		data367
 	},
 	{
-		0,
+		NID_uacurve9,
 		{431, 5, 3, 1, 0, -1},
 		data431
 	}

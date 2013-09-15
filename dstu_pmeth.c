@@ -27,7 +27,7 @@ static int dstu_pkey_init_le(EVP_PKEY_CTX *ctx)
 		return 0;
 	}
 
-	dstu_ctx->type = dstu_nids[0];
+	dstu_ctx->type = NID_dstu4145le;
 	EVP_PKEY_CTX_set_data(ctx, dstu_ctx);
 	return 1;
 }
@@ -42,7 +42,7 @@ static int dstu_pkey_init_be(EVP_PKEY_CTX *ctx)
 		return 0;
 	}
 
-	dstu_ctx->type = dstu_nids[1];
+	dstu_ctx->type = NID_dstu4145be;
 	EVP_PKEY_CTX_set_data(ctx, dstu_ctx);
 	return 1;
 }
@@ -165,7 +165,7 @@ static int dstu_pkey_ctrl(EVP_PKEY_CTX *ctx, int type, int p1, void *p2)
 		DSTU_KEY_CTX_set(dstu_ctx, group, NULL);
 		return 1;
 	case EVP_PKEY_CTRL_MD:
-		if (DSTU_MD_NID != EVP_MD_type((const EVP_MD *)p2))
+		if (NID_dstu34311 != EVP_MD_type((const EVP_MD *)p2))
 		{
 			DSTUerr(DSTU_F_DSTU_PKEY_CTRL, DSTU_R_INVALID_DIGEST_TYPE);
 			return 0;
@@ -284,7 +284,7 @@ static int dstu_pkey_sign(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen,
 		if (!dstu_do_sign(key->ec, tbs, tbslen, sig_data))
 			goto err;
 
-		if (dstu_nids[0] == EVP_PKEY_id(pkey))
+		if (NID_dstu4145le == EVP_PKEY_id(pkey))
 			reverse_bytes(sig_data, 2 * field_size);
 
 		ASN1_STRING_set0((ASN1_STRING *)dstu_sig, sig_data, 2 * field_size);
@@ -354,7 +354,7 @@ static int dstu_pkey_verify(EVP_PKEY_CTX *ctx, const unsigned char *sig, size_t 
 	if (siglen < (2 * field_size))
 		goto err;
 
-	if (dstu_nids[0] == EVP_PKEY_id(pkey))
+	if (NID_dstu4145le == EVP_PKEY_id(pkey))
 	{
 		/* Signature is little-endian, need to reverse it */
 		sig_be = OPENSSL_malloc(siglen);
@@ -394,11 +394,11 @@ EVP_PKEY_METHOD *dstu_pkey_meth_le = NULL, *dstu_pkey_meth_be = NULL;
 
 int dstu_pkey_meth_init(void)
 {
-	dstu_pkey_meth_le = EVP_PKEY_meth_new(dstu_nids[0], 0);
+	dstu_pkey_meth_le = EVP_PKEY_meth_new(NID_dstu4145le, 0);
 	if (!dstu_pkey_meth_le)
 		return 0;
 
-	dstu_pkey_meth_be = EVP_PKEY_meth_new(dstu_nids[1], 0);
+	dstu_pkey_meth_be = EVP_PKEY_meth_new(NID_dstu4145be, 0);
 	if (!dstu_pkey_meth_be)
 	{
 		EVP_PKEY_meth_free(dstu_pkey_meth_le);

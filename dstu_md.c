@@ -99,7 +99,7 @@ static int dstu_md_ctrl(EVP_MD_CTX *ctx, int cmd, int p1, void *p2)
 
 EVP_MD dstu_md =
 {
-	0,
+	NID_dstu34311,
 	0,
 	32,
 	EVP_MD_FLAG_PKEY_METHOD_SIGNATURE,
