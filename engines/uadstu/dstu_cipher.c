@@ -132,7 +132,7 @@ static int dstu_cipher_ctrl(EVP_CIPHER_CTX *ctx, int cmd, int p1, void *p2)
 
 EVP_CIPHER dstu_cipher =
 {
-	0,
+	NID_dstu28147_cfb,
 	1,
 	32,
 	DSTU_CIPHER_BLOCK_SIZE,
