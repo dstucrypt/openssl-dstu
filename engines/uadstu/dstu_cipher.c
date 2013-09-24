@@ -45,11 +45,16 @@ static int dstu_cipher_do_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out, const 
 
 		for (i = 0; i < to_use; i++)
 		{
-			*out = *in ^ ctx->buf[DSTU_CIPHER_BLOCK_SIZE - ctx->num + i];
 			if (ctx->encrypt)
+      {
+        *out = *in ^ ctx->buf[DSTU_CIPHER_BLOCK_SIZE - ctx->num + i];
 				ctx->iv[DSTU_CIPHER_BLOCK_SIZE - ctx->num + i] = *out;
+      }
 			else
+      {
 				ctx->iv[DSTU_CIPHER_BLOCK_SIZE - ctx->num + i] = *in;
+        *out = *in ^ ctx->buf[DSTU_CIPHER_BLOCK_SIZE - ctx->num + i];
+      }
 			in++;
 			out++;
 		}
@@ -90,11 +95,16 @@ static int dstu_cipher_do_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out, const 
 	{
 		for (i = 0; i < inl; i++)
 		{
-			*out = *in ^ ctx->buf[i];
 			if (ctx->encrypt)
+      {
+        *out = *in ^ ctx->buf[i];
 				ctx->iv[i] = *out;
+      }
 			else
+      {
 				ctx->iv[i] = *in;
+        *out = *in ^ ctx->buf[i];
+      }
 			in++;
 			out++;
 		}
