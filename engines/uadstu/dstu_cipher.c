@@ -21,11 +21,17 @@ static int dstu_cipher_init(EVP_CIPHER_CTX *ctx, const unsigned char *key, const
 
 	unpack_sbox(default_sbox, &sbox);
 	gost_init(gctx, &sbox);
-	gost_key(gctx, key);
 
-	memcpy(ctx->oiv, iv, DSTU_CIPHER_BLOCK_SIZE);
-	memcpy(ctx->iv, iv, DSTU_CIPHER_BLOCK_SIZE);
-	gostcrypt(gctx, ctx->iv, ctx->buf);
+	if (key)
+		gost_key(gctx, key);
+
+	if (iv)
+	{
+		memcpy(ctx->oiv, iv, DSTU_CIPHER_BLOCK_SIZE);
+		memcpy(ctx->iv, iv, DSTU_CIPHER_BLOCK_SIZE);
+		gostcrypt(gctx, ctx->iv, ctx->buf);
+		ctx->num = 0;
+	}
 
 	return 1;
 }
@@ -34,10 +40,13 @@ static int dstu_cipher_do_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out, const 
 {
 	size_t to_use, i, blocks;
 	gost_ctx* gctx = ctx->cipher_data;
-	unsigned char tmpiv[DSTU_CIPHER_BLOCK_SIZE];
+	unsigned char tmpiv[DSTU_CIPHER_BLOCK_SIZE], *out_start = out;
 
-	if (!inl)
-		return 1;
+	if ((!inl) && (!in))
+		return 0;
+
+	if ((!inl) || (!in))
+		return -1;
 
 	if (ctx->num)
 	{
@@ -46,15 +55,15 @@ static int dstu_cipher_do_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out, const 
 		for (i = 0; i < to_use; i++)
 		{
 			if (ctx->encrypt)
-      {
-        *out = *in ^ ctx->buf[DSTU_CIPHER_BLOCK_SIZE - ctx->num + i];
+			{
+				*out = *in ^ ctx->buf[DSTU_CIPHER_BLOCK_SIZE - ctx->num + i];
 				ctx->iv[DSTU_CIPHER_BLOCK_SIZE - ctx->num + i] = *out;
-      }
+			}
 			else
-      {
+			{
 				ctx->iv[DSTU_CIPHER_BLOCK_SIZE - ctx->num + i] = *in;
-        *out = *in ^ ctx->buf[DSTU_CIPHER_BLOCK_SIZE - ctx->num + i];
-      }
+				*out = *in ^ ctx->buf[DSTU_CIPHER_BLOCK_SIZE - ctx->num + i];
+			}
 			in++;
 			out++;
 		}
@@ -96,15 +105,15 @@ static int dstu_cipher_do_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out, const 
 		for (i = 0; i < inl; i++)
 		{
 			if (ctx->encrypt)
-      {
-        *out = *in ^ ctx->buf[i];
+			{
+				*out = *in ^ ctx->buf[i];
 				ctx->iv[i] = *out;
-      }
+			}
 			else
-      {
+			{
 				ctx->iv[i] = *in;
-        *out = *in ^ ctx->buf[i];
-      }
+				*out = *in ^ ctx->buf[i];
+			}
 			in++;
 			out++;
 		}
@@ -112,7 +121,7 @@ static int dstu_cipher_do_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out, const 
 		ctx->num = DSTU_CIPHER_BLOCK_SIZE - inl;
 	}
 
-	return 1;
+	return out - out_start;
 }
 
 static int dstu_cipher_cleanup(EVP_CIPHER_CTX *ctx)
@@ -146,7 +155,7 @@ EVP_CIPHER dstu_cipher =
 	1,
 	32,
 	DSTU_CIPHER_BLOCK_SIZE,
-	EVP_CIPH_CFB_MODE| EVP_CIPH_NO_PADDING | EVP_CIPH_CUSTOM_IV,
+	EVP_CIPH_CFB_MODE| EVP_CIPH_NO_PADDING | EVP_CIPH_CUSTOM_IV | EVP_CIPH_FLAG_CUSTOM_CIPHER | EVP_CIPH_ALWAYS_CALL_INIT,
 	dstu_cipher_init,
 	dstu_cipher_do_cipher,
 	dstu_cipher_cleanup,
