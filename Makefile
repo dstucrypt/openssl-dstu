@@ -16,7 +16,7 @@ LIBOBJ= e_dstu_err.o dstu_ameth.o dstu_asn1.o dstu_cipher.o dstu_compress.o dstu
 
 SRC=$(LIBSRC)
 
-LIBNAME=uadstu
+LIBNAME=dstu
 
 top: 
 	(cd $(TOP); $(MAKE) DIRS=engines EDIRS=$(DIR) sub_all)
