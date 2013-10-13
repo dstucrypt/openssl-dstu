@@ -34,6 +34,8 @@ extern EVP_MD dstu_md;
 
 extern EVP_CIPHER dstu_cipher;
 
+extern RAND_METHOD dstu_rand_meth;
+
 /* This ctrl command to set custom sbox for MD and CIPHER */
 /* p2 should point to char array of 64 bytes (packed format, see default_sbox), p1 should be set to size of the array (64) */
 #define DSTU_SET_CUSTOM_SBOX (EVP_MD_CTRL_ALG_CTRL + 1)
