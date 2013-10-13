@@ -48,7 +48,7 @@ static int dstu_nids[] = { NID_dstu4145le, NID_dstu4145be };
 static int digest_nids[] = { NID_dstu34311 };
 static int cipher_nids[] = { NID_dstu28147_cfb };
 
-static const int DSTU_ENGINE_FLAGS = ENGINE_METHOD_PKEY_METHS | ENGINE_METHOD_PKEY_ASN1_METHS | ENGINE_METHOD_DIGESTS | ENGINE_METHOD_CIPHERS;
+static const int DSTU_ENGINE_FLAGS = ENGINE_METHOD_PKEY_METHS | ENGINE_METHOD_PKEY_ASN1_METHS | ENGINE_METHOD_DIGESTS | ENGINE_METHOD_CIPHERS | ENGINE_METHOD_RAND;
 
 static int dstu_pkey_meths(ENGINE *e, EVP_PKEY_METHOD **pmeth, const int **nids, int nid)
 {
@@ -191,6 +191,11 @@ static int bind_dstu(ENGINE *e,const char *id)
 		return 0;
 	}
 	if (!ENGINE_set_ciphers(e, dstu_ciphers))
+	{
+		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
+		return 0;
+	}
+	if (!ENGINE_set_RAND(e, &dstu_rand_meth))
 	{
 		DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 		return 0;

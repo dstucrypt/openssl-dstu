@@ -10,13 +10,13 @@ LIB=$(TOP)/libcrypto.a
 
 #TEST=gost2814789t.c
 
-LIBSRC= dstu_ameth.c dstu_asn1.c dstu_cipher.c dstu_compress.c dstu_engine.c dstu_key.c dstu_md.c dstu_params.c dstu_pmeth.c dstu_sign.c dstu89.c dstuhash.c
+LIBSRC= dstu_ameth.c dstu_asn1.c dstu_cipher.c dstu_compress.c dstu_engine.c dstu_key.c dstu_md.c dstu_params.c dstu_pmeth.c dstu_sign.c dstu89.c dstuhash.c dstu_rbg.c
 
-LIBOBJ= e_dstu_err.o dstu_ameth.o dstu_asn1.o dstu_cipher.o dstu_compress.o dstu_engine.o dstu_key.o dstu_md.o dstu_params.o dstu_pmeth.o dstu_sign.o dstu89.o dstuhash.o
+LIBOBJ= e_dstu_err.o dstu_ameth.o dstu_asn1.o dstu_cipher.o dstu_compress.o dstu_engine.o dstu_key.o dstu_md.o dstu_params.o dstu_pmeth.o dstu_sign.o dstu89.o dstuhash.o dstu_rbg.o
 
 SRC=$(LIBSRC)
 
-LIBNAME=dstu
+LIBNAME=uadstu
 
 top: 
 	(cd $(TOP); $(MAKE) DIRS=engines EDIRS=$(DIR) sub_all)
