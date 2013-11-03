@@ -10,7 +10,9 @@
 
 #include <openssl/ec.h>
 
-int dstu_point_compress(const EC_GROUP* group, const EC_POINT* point, unsigned char* compressed, int compressed_length);
-int dstu_point_expand(const unsigned char* compressed, int compressed_length, const EC_GROUP* group, EC_POINT* point);
+int dstu_point_compress(const EC_GROUP* group, const EC_POINT* point,
+	unsigned char* compressed, int compressed_length);
+int dstu_point_expand(const unsigned char* compressed, int compressed_length,
+	const EC_GROUP* group, EC_POINT* point);
 
 #endif /* DSTU_COMPRESS_H_ */

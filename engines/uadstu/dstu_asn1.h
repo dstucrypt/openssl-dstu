@@ -12,71 +12,71 @@
 #include <openssl/asn1t.h>
 
 typedef struct DSTU_Pentanomial_st
-{
+    {
 	ASN1_INTEGER* k;
 	ASN1_INTEGER* j;
 	ASN1_INTEGER* l;
-} DSTU_Pentanomial;
+    } DSTU_Pentanomial;
 
 DECLARE_ASN1_FUNCTIONS(DSTU_Pentanomial)
 
 typedef struct DSTU_Polynomial_st
-{
+    {
 
 #define DSTU_TRINOMIAL 0
 #define DSTU_PENTANOMIAL 1
 
 	int type;
 	union
-	{
+	    {
 		ASN1_INTEGER* k;
 		DSTU_Pentanomial* pentanomial;
-	} poly;
-} DSTU_Polynomial;
+	    } poly;
+    } DSTU_Polynomial;
 
 DECLARE_ASN1_FUNCTIONS(DSTU_Polynomial)
 
 typedef struct DSTU_BinaryField_st
-{
+    {
 	ASN1_INTEGER* m;
 	DSTU_Polynomial* poly;
-} DSTU_BinaryField;
+    } DSTU_BinaryField;
 
 DECLARE_ASN1_FUNCTIONS(DSTU_BinaryField)
 
 typedef struct DSTU_CustomCurveSpec_st
-{
+    {
 	DSTU_BinaryField* field;
 	ASN1_INTEGER* a;
 	ASN1_OCTET_STRING* b;
 	ASN1_INTEGER* n;
 	ASN1_OCTET_STRING* bp;
-} DSTU_CustomCurveSpec;
+    } DSTU_CustomCurveSpec;
 
 DECLARE_ASN1_FUNCTIONS(DSTU_CustomCurveSpec)
 
 typedef struct DSTU_CurveSpec_st
-{
+    {
 
 #define DSTU_STANDARD_CURVE 0
 #define DSTU_CUSTOM_CURVE 1
 
 	int type;
 	union
-	{
+	    {
 		ASN1_OBJECT* named_curve;
 		DSTU_CustomCurveSpec* custom_curve;
-	} curve;
+	    } curve;
 
-} DSTU_CurveSpec;
+    } DSTU_CurveSpec;
 
 DECLARE_ASN1_FUNCTIONS(DSTU_CurveSpec)
 
 typedef struct DSTU_AlgorithmParameters_st
-{
+    {
 	DSTU_CurveSpec* curve;
 	ASN1_OCTET_STRING* sbox;
-} DSTU_AlgorithmParameters;
+    } DSTU_AlgorithmParameters;
 
 DECLARE_ASN1_FUNCTIONS(DSTU_AlgorithmParameters)
 
