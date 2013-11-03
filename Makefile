@@ -8,7 +8,7 @@ AR= ar r
 CFLAGS= $(INCLUDES) $(CFLAG)
 LIB=$(TOP)/libcrypto.a
 
-#TEST=gost2814789t.c
+TEST=dstutest.c
 
 LIBSRC= dstu_ameth.c dstu_asn1.c dstu_cipher.c dstu_compress.c dstu_engine.c dstu_key.c dstu_md.c dstu_params.c dstu_pmeth.c dstu_sign.c dstu89.c dstuhash.c dstu_rbg.c
 
@@ -16,7 +16,7 @@ LIBOBJ= e_dstu_err.o dstu_ameth.o dstu_asn1.o dstu_cipher.o dstu_compress.o dstu
 
 SRC=$(LIBSRC)
 
-LIBNAME=uadstu
+LIBNAME=dstu
 
 top: 
 	(cd $(TOP); $(MAKE) DIRS=engines EDIRS=$(DIR) sub_all)
@@ -210,6 +210,20 @@ dstu_pmeth.o: ../../include/openssl/sha.h ../../include/openssl/stack.h
 dstu_pmeth.o: ../../include/openssl/symhacks.h ../../include/openssl/x509.h
 dstu_pmeth.o: ../../include/openssl/x509_vfy.h ../ccgost/gost89.h dstu_asn1.h
 dstu_pmeth.o: dstu_engine.h dstu_key.h dstu_params.h dstu_pmeth.c e_dstu_err.h
+dstu_rbg.o: ../../include/openssl/asn1.h ../../include/openssl/bio.h
+dstu_rbg.o: ../../include/openssl/buffer.h ../../include/openssl/crypto.h
+dstu_rbg.o: ../../include/openssl/e_os2.h ../../include/openssl/ec.h
+dstu_rbg.o: ../../include/openssl/ecdh.h ../../include/openssl/ecdsa.h
+dstu_rbg.o: ../../include/openssl/engine.h ../../include/openssl/err.h
+dstu_rbg.o: ../../include/openssl/evp.h ../../include/openssl/lhash.h
+dstu_rbg.o: ../../include/openssl/obj_mac.h ../../include/openssl/objects.h
+dstu_rbg.o: ../../include/openssl/opensslconf.h
+dstu_rbg.o: ../../include/openssl/opensslv.h ../../include/openssl/ossl_typ.h
+dstu_rbg.o: ../../include/openssl/pkcs7.h ../../include/openssl/safestack.h
+dstu_rbg.o: ../../include/openssl/sha.h ../../include/openssl/stack.h
+dstu_rbg.o: ../../include/openssl/symhacks.h ../../include/openssl/x509.h
+dstu_rbg.o: ../../include/openssl/x509_vfy.h ../ccgost/gost89.h dstu_engine.h
+dstu_rbg.o: dstu_params.h dstu_rbg.c
 dstu_sign.o: ../../include/openssl/asn1.h ../../include/openssl/bio.h
 dstu_sign.o: ../../include/openssl/bn.h ../../include/openssl/buffer.h
 dstu_sign.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h

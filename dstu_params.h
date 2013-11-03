@@ -15,11 +15,11 @@
 #define get_default_group() group_from_named_curve(DEFAULT_CURVE)
 
 typedef struct dstu_named_curve_st
-{
+    {
 	int nid;
 	int poly[6];
 	unsigned char* data;
-} DSTU_NAMED_CURVE;
+    } DSTU_NAMED_CURVE;
 
 extern DSTU_NAMED_CURVE dstu_curves[];
 extern unsigned char default_sbox[64];
