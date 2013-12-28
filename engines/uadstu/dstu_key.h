@@ -1,9 +1,7 @@
-/*
- * dstu_key.h
- *
- *  Created on: May 29, 2013
- *      Author: ignat
- */
+/* =====================================================================
+ * Author: Ignat Korchagin <ignat.korchagin@gmail.com>
+ * This file is distributed under the same license as OpenSSL
+ ==================================================================== */
 
 #ifndef DSTU_KEY_H_
 #define DSTU_KEY_H_

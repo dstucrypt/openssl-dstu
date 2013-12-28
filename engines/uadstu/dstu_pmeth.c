@@ -1,9 +1,8 @@
-/*
- * dstu_pkey.c
- *
- *  Created on: Mar 4, 2013
- *      Author: ignat
- */
+/* =====================================================================
+ * Author: Ignat Korchagin <ignat.korchagin@gmail.com>
+ * This file is distributed under the same license as OpenSSL
+ ==================================================================== */
+
 #include "dstu_engine.h"
 #include "dstu_key.h"
 #include "dstu_params.h"
@@ -58,24 +57,6 @@ static void dstu_pkey_cleanup(EVP_PKEY_CTX *ctx)
 	EVP_PKEY_CTX_set_data(ctx, NULL);
 	}
     }
-
-/*static int dstu_pkey_paramgen_init(EVP_PKEY_CTX *ctx)
- {
- printf("dstu_pkey_paramgen_init\n");
- return 1;
- }
-
- static int dstu_pkey_paramgen(EVP_PKEY_CTX *ctx, EVP_PKEY *pkey)
- {
- printf("dstu_pkey_paramgen\n");
- return 1;
- }*/
-
-/*static int dstu_pkey_keygen_init(EVP_PKEY_CTX *ctx)
- {
- printf("dstu_pkey_keygen_init\n");
- return 1;
- }*/
 
 static int dstu_pkey_keygen(EVP_PKEY_CTX *ctx, EVP_PKEY *pkey)
     {
@@ -222,11 +203,6 @@ static int dstu_pkey_ctrl_str(EVP_PKEY_CTX *ctx, const char *type,
 
     return 0;
     }
-
-/*static int dstu_pkey_sign_init(EVP_PKEY_CTX *ctx)
- {
- return 0;
- }*/
 
 static int dstu_pkey_sign(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen,
 	const unsigned char *tbs, size_t tbslen)
@@ -406,7 +382,6 @@ int dstu_pkey_meth_init(void)
 
     EVP_PKEY_meth_set_init(dstu_pkey_meth_le, dstu_pkey_init_le);
     EVP_PKEY_meth_set_cleanup(dstu_pkey_meth_le, dstu_pkey_cleanup);
-    /*EVP_PKEY_meth_set_paramgen(dstu_pkey_meth, dstu_pkey_paramgen_init, dstu_pkey_paramgen);*/
     EVP_PKEY_meth_set_keygen(dstu_pkey_meth_le, /*dstu_pkey_keygen_init*/NULL,
 	    dstu_pkey_keygen);
     EVP_PKEY_meth_set_ctrl(dstu_pkey_meth_le, dstu_pkey_ctrl,
@@ -419,7 +394,6 @@ int dstu_pkey_meth_init(void)
 
     EVP_PKEY_meth_set_init(dstu_pkey_meth_be, dstu_pkey_init_be);
     EVP_PKEY_meth_set_cleanup(dstu_pkey_meth_be, dstu_pkey_cleanup);
-    /*EVP_PKEY_meth_set_paramgen(dstu_pkey_meth, dstu_pkey_paramgen_init, dstu_pkey_paramgen);*/
     EVP_PKEY_meth_set_keygen(dstu_pkey_meth_be, /*dstu_pkey_keygen_init*/NULL,
 	    dstu_pkey_keygen);
     EVP_PKEY_meth_set_ctrl(dstu_pkey_meth_be, dstu_pkey_ctrl,

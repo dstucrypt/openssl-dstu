@@ -1,9 +1,7 @@
-/*
- * dstu_key.c
- *
- *  Created on: May 29, 2013
- *      Author: ignat
- */
+/* =====================================================================
+ * Author: Ignat Korchagin <ignat.korchagin@gmail.com>
+ * This file is distributed under the same license as OpenSSL
+ ==================================================================== */
 
 #include "dstu_key.h"
 #include "dstu_asn1.h"

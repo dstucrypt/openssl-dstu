@@ -1,9 +1,7 @@
-/*
- * dstu_compress.c
- *
- *  Created on: Jun 3, 2013
- *      Author: ignat
- */
+/* =====================================================================
+ * Author: Ignat Korchagin <ignat.korchagin@gmail.com>
+ * This file is distributed under the same license as OpenSSL
+ ==================================================================== */
 
 #include "dstu_compress.h"
 #include "dstu_params.h"

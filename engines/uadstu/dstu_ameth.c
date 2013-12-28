@@ -1,9 +1,7 @@
-/*
- * dstu_ameth.c
- *
- *  Created on: Mar 5, 2013
- *      Author: ignat
- */
+/* =====================================================================
+ * Author: Ignat Korchagin <ignat.korchagin@gmail.com>
+ * This file is distributed under the same license as OpenSSL
+ ==================================================================== */
 #include "dstu_engine.h"
 #include "dstu_asn1.h"
 #include "dstu_key.h"
@@ -75,12 +73,6 @@ static int dstu_asn1_param_encode(const EVP_PKEY *pkey, unsigned char **pder)
 
     return bytes_encoded;
     }
-
-/*static int dstu_asn1_param_missing(const EVP_PKEY *pk)
- {
- printf("dstu_asn1_param_missing\n");
- return 0;
- }*/
 
 static int dstu_asn1_param_copy(EVP_PKEY *to, const EVP_PKEY *from)
     {
@@ -495,9 +487,7 @@ static int dstu_asn1_pub_decode(EVP_PKEY *pk, X509_PUBKEY *pub)
 
 static int dstu_asn1_pub_encode(X509_PUBKEY *pub, const EVP_PKEY *pk)
     {
-    unsigned char /* *encoded_params = NULL,*/*compressed = NULL, *pbk_encoded =
-	    NULL;
-    /*int encoded_params_bytes = 0;*/
+    unsigned char *compressed = NULL, *pbk_encoded = NULL;
     ASN1_OCTET_STRING* public_key = NULL;
     int ret = 0, algnid = EVP_PKEY_id(pk), field_size, pbk_encoded_bytes;
     DSTU_KEY* key;
@@ -521,12 +511,6 @@ static int dstu_asn1_pub_encode(X509_PUBKEY *pub, const EVP_PKEY *pk)
     params->length = dstu_asn1_param_encode(pk, &(params->data));
     if (params->length <= 0)
 	goto err;
-
-    /*encoded_params_bytes = dstu_asn1_param_encode(pk, &encoded_params);
-     if (!encoded_params_bytes)
-     goto err;
-
-     ASN1_STRING_set0(params, encoded_params, encoded_params_bytes);*/
 
     key = EVP_PKEY_get0((EVP_PKEY*) pk);
     if (!key)
@@ -694,20 +678,6 @@ int dstu_asn1_meth_init(void)
 	dstu_asn1_meth_le = NULL;
 	return 0;
 	}
-
-    /*if (!OBJ_add_sigid(dstu_nids[0], DSTU_MD_NID, dstu_nids[0]))
-     {
-     EVP_PKEY_asn1_free(dstu_asn1_meth_le);
-     EVP_PKEY_asn1_free(dstu_asn1_meth_be);
-     return 0;
-     }
-
-     if (!OBJ_add_sigid(dstu_nids[1], DSTU_MD_NID, dstu_nids[1]))
-     {
-     EVP_PKEY_asn1_free(dstu_asn1_meth_le);
-     EVP_PKEY_asn1_free(dstu_asn1_meth_be);
-     return 0;
-     }*/
 
     EVP_PKEY_asn1_set_param(dstu_asn1_meth_le, dstu_asn1_param_decode,
 	    dstu_asn1_param_encode, /*dstu_asn1_param_missing*/NULL,

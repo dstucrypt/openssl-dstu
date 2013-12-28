@@ -1,8 +1,8 @@
-/* test/dstutest.c */
-/* ====================================================================
- *
- * ====================================================================
- */
+/* =====================================================================
+ * Author: Ignat Korchagin <ignat.korchagin@gmail.com>
+ * This file is distributed under the same license as OpenSSL
+ ==================================================================== */
+
 #include <stdio.h>
 
 #if defined(OPENSSL_NO_ENGINE) || defined(OPENSSL_NO_DSTU)

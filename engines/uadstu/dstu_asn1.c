@@ -1,9 +1,7 @@
-/*
- * dstu_asn1.c
- *
- *  Created on: Mar 9, 2013
- *      Author: ignat
- */
+/* =====================================================================
+ * Author: Ignat Korchagin <ignat.korchagin@gmail.com>
+ * This file is distributed under the same license as OpenSSL
+ ==================================================================== */
 #include "dstu_engine.h"
 #include "dstu_asn1.h"
 
