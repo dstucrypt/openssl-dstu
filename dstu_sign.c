@@ -1,9 +1,8 @@
-/*
- * dstu_sign.c
- *
- *  Created on: May 14, 2013
- *      Author: ignat
- */
+/* =====================================================================
+ * Author: Ignat Korchagin <ignat.korchagin@gmail.com>
+ * This file is distributed under the same license as OpenSSL
+ ==================================================================== */
+
 #include <openssl/bn.h>
 #include <openssl/ec.h>
 #include <string.h>

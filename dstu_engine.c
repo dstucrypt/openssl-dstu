@@ -1,9 +1,7 @@
-/*
- * dstu_engine.c
- *
- *  Created on: Mar 4, 2013
- *      Author: ignat
- */
+/* =====================================================================
+ * Author: Ignat Korchagin <ignat.korchagin@gmail.com>
+ * This file is distributed under the same license as OpenSSL
+ ==================================================================== */
 
 #include "dstu_engine.h"
 #include "dstu_params.h"
@@ -13,36 +11,6 @@
 
 static const char *engine_dstu_id = "dstu";
 static const char *engine_dstu_name = "Reference implementation of DSTU engine";
-
-/* First is little-endian DSTU and second is big-endian DSTU*/
-/*int dstu_nids[2];
- int DSTU_MD_NID = 0;
- int DSTU_CIPHER_NID = 0;
-
- static int create_dstu_nid()
- {
- int i;
- char curve_nid[] = "1.2.804.2.1.1.1.1.3.1.1.2.x";
- char curve_sn[] = "uacurvex";
- char curve_ln[] = "DSTU curve x";
- dstu_nids[0] = OBJ_create("1.2.804.2.1.1.1.1.3.1.1", "dstu4145le", "dstu4145 little endian");
- dstu_nids[1] = OBJ_create("1.2.804.2.1.1.1.1.3.1.1.1.1", "dstu4145be", "dstu4145 big endian");
- DSTU_MD_NID = OBJ_create("1.2.804.2.1.1.1.1.2.1", "gost34311", "GOST 34311-95");
- DSTU_CIPHER_NID = OBJ_create("1.2.804.2.1.1.1.1.1.1", "dstu28147", "DSTU GOST 28147:2009");
-
- for (i = 0; i < 10; i++)
- {
- curve_nid[sizeof(curve_nid) - 2] = (i + 0x30);
- curve_sn[sizeof(curve_sn) - 2] = (i + 0x30);
- curve_ln[sizeof(curve_ln) - 2] = (i + 0x30);
-
- dstu_curves[i].nid = OBJ_create(curve_nid, curve_sn, curve_ln);
- if (!dstu_curves[i].nid)
- return 0;
- }
-
- return dstu_nids[0] && dstu_nids[1] && DSTU_MD_NID && DSTU_CIPHER_NID;
- }*/
 
 static int dstu_nids[] =
     {
@@ -191,16 +159,6 @@ static int bind_dstu(ENGINE *e, const char *id)
 	DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);
 	return 0;
 	}
-    /* TODO: this will be useless for built-in engine */
-    /*if (!create_dstu_nid())
-     {
-     printf("create_dstu_nid failed\n");
-     return 0;
-     }*/
-    /* TODO: Move this to MD declaration, when we are built-in engine */
-    //dstu_md.type = DSTU_MD_NID;
-    //dstu_cipher.nid = DSTU_CIPHER_NID;
-    //dstu_md.pkey_type = dstu_nids[0];
     if (!ENGINE_set_digests(e, dstu_digests))
 	{
 	DSTUerr(DSTU_F_BIND_DSTU, ERR_R_ENGINE_LIB);

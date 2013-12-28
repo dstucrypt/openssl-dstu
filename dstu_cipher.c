@@ -1,9 +1,7 @@
-/*
- * dstu_cipher.c
- *
- *  Created on: Jun 17, 2013
- *      Author: ignat
- */
+/* =====================================================================
+ * Author: Ignat Korchagin <ignat.korchagin@gmail.com>
+ * This file is distributed under the same license as OpenSSL
+ ==================================================================== */
 
 #include "dstu_engine.h"
 #include "dstu_params.h"
@@ -171,50 +169,3 @@ EVP_CIPHER dstu_cipher =
 	    NULL
     };
 
-/*void test_cipher(void)
- {
- unsigned char data[50];
- unsigned char enc[sizeof(data)];
- unsigned char dec[sizeof(data)];
- unsigned char key[32];
- unsigned char iv[8];
- EVP_CIPHER_CTX ctx;
- int i, inl = sizeof(data), outl = sizeof(enc);
-
- for (i = 0; i < sizeof(data); i++)
- data[i] = i;
-
- for (i = 0; i < sizeof(key); i++)
- key[i] = i;
-
- for (i = 0; i < sizeof(iv); i++)
- iv[i] = i;
-
- EVP_CIPHER_CTX_init(&ctx);
- printf("%p\n", EVP_get_cipherbyname("dstu28147"));
-
- if (!EVP_EncryptInit(&ctx, EVP_get_cipherbyname("dstu28147"), key, iv))
- printf("EVP_EncryptInit\n");
-
- for (i=0; i<sizeof(enc); i++)
- {
- if (!EVP_EncryptUpdate(&ctx, &enc[i], &outl, &data[i], 1))
- printf("EVP_EncryptUpdate\n");
- }
-
- printf("outl: %d\n", outl);
-
- if (!EVP_DecryptInit(&ctx, EVP_get_cipherbyname("dstu28147"), key, iv))
- printf("EVP_DecryptInit\n");
-
- if (!EVP_DecryptUpdate(&ctx, dec, &outl, enc, sizeof(enc)))
- printf("EVP_DecryptUpdate\n");
-
- EVP_CIPHER_CTX_cleanup(&ctx);
-
- if (!memcmp(data, dec, sizeof(data)))
- printf("MATCH\n");
- else
- printf("no match\n");
-
- }*/

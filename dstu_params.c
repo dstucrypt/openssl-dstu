@@ -1,10 +1,7 @@
-/*
- * dstu_params.c
- *
- *  Created on: Mar 6, 2013
- *      Author: ignat
- */
-
+/* =====================================================================
+ * Author: Ignat Korchagin <ignat.korchagin@gmail.com>
+ * This file is distributed under the same license as OpenSSL
+ ==================================================================== */
 
 #include "dstu_params.h"
 #include <openssl/evp.h>

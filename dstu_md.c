@@ -1,9 +1,7 @@
-/*
- * dstu_md.c
- *
- *  Created on: May 20, 2013
- *      Author: ignat
- */
+/* =====================================================================
+ * Author: Ignat Korchagin <ignat.korchagin@gmail.com>
+ * This file is distributed under the same license as OpenSSL
+ ==================================================================== */
 
 #include "dstu_engine.h"
 #include "dstu_params.h"
