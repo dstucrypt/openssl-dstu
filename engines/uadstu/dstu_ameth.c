@@ -174,8 +174,8 @@ static int dstu_asn1_priv_decode(EVP_PKEY *pk, PKCS8_PRIV_KEY_INFO *p8)
     ASN1_STRING* params = NULL;
     DSTU_KEY* key = NULL;
     BIGNUM* prk = NULL;
-    ASN1_INTEGER* asn1key = NULL;
-    int prk_encoded_bytes = 0, params_type = 0, algnid;
+    unsigned char* bn_bytes = NULL;
+    int prk_encoded_bytes = 0, params_type = 0, algnid, res = 0;
 
     if (!PKCS8_pkey_get0(&algoid, &prk_encoded, &prk_encoded_bytes, &alg, p8))
 	{
@@ -217,48 +217,51 @@ static int dstu_asn1_priv_decode(EVP_PKEY *pk, PKCS8_PRIV_KEY_INFO *p8)
 	    ASN1_STRING_length(params)))
 	return 0;
 
-    asn1key = d2i_ASN1_INTEGER(NULL, &prk_encoded, prk_encoded_bytes);
-    if (!asn1key)
+    bn_bytes = OPENSSL_malloc(prk_encoded_bytes);
+    if (!bn_bytes)
 	{
-	DSTUerr(DSTU_F_DSTU_ASN1_PRIV_DECODE, ERR_R_ASN1_LIB);
+	DSTUerr(DSTU_F_DSTU_ASN1_PRIV_DECODE, ERR_R_MALLOC_FAILURE);
 	return 0;
 	}
-    prk = ASN1_INTEGER_to_BN(asn1key, NULL);
+
+    reverse_bytes_copy(bn_bytes, prk_encoded, prk_encoded_bytes);
+
+    prk = BN_bin2bn(bn_bytes, prk_encoded_bytes, NULL);
     if (!prk)
 	{
-	ASN1_INTEGER_free(asn1key);
-	DSTUerr(DSTU_F_DSTU_ASN1_PRIV_DECODE, ERR_R_ASN1_LIB);
-	return 0;
+	DSTUerr(DSTU_F_DSTU_ASN1_PRIV_DECODE, ERR_R_BN_LIB);
+	goto err;
 	}
 
     key = EVP_PKEY_get0((EVP_PKEY*) pk);
     if (!EC_KEY_set_private_key(key->ec, prk))
 	{
-	BN_free(prk);
-	ASN1_INTEGER_free(asn1key);
 	DSTUerr(DSTU_F_DSTU_ASN1_PRIV_DECODE, ERR_R_EC_LIB);
-	return 0;
+	goto err;
 	}
 
     if (!dstu_add_public_key(key->ec))
 	{
-	BN_free(prk);
-	ASN1_INTEGER_free(asn1key);
 	DSTUerr(DSTU_F_DSTU_ASN1_PRIV_DECODE, ERR_R_EC_LIB);
-	return 0;
+	goto err;
 	}
 
-    BN_free(prk);
-    ASN1_INTEGER_free(asn1key);
+    res = 1;
 
-    return 1;
+err:
+	if (prk)
+		BN_free(prk);
+
+	if (bn_bytes)
+		OPENSSL_free(bn_bytes);
+
+    return res;
     }
 
 static int dstu_asn1_priv_encode(PKCS8_PRIV_KEY_INFO *p8, const EVP_PKEY *pk)
     {
     unsigned char* encoded_params = NULL;
     int encoded_params_bytes = 0;
-    ASN1_INTEGER* asn1key = NULL;
     unsigned char* prk_encoded = NULL;
     int prk_encoded_bytes = 0;
     int ret = 0, algnid = EVP_PKEY_id(pk);
@@ -297,19 +300,21 @@ static int dstu_asn1_priv_encode(PKCS8_PRIV_KEY_INFO *p8, const EVP_PKEY *pk)
 	goto err;
 	}
 
-    asn1key = BN_to_ASN1_INTEGER(d, NULL);
-    if (!asn1key)
-	{
-	DSTUerr(DSTU_F_DSTU_ASN1_PRIV_ENCODE, ERR_R_ASN1_LIB);
-	goto err;
-	}
-
-    prk_encoded_bytes = i2d_ASN1_INTEGER(asn1key, &prk_encoded);
+    prk_encoded_bytes = BN_num_bytes(d);
+    prk_encoded = OPENSSL_malloc(prk_encoded_bytes);
     if (!prk_encoded)
-	{
-	DSTUerr(DSTU_F_DSTU_ASN1_PRIV_ENCODE, ERR_R_ASN1_LIB);
-	goto err;
-	}
+    {
+    DSTUerr(DSTU_F_DSTU_ASN1_PRIV_ENCODE, ERR_R_MALLOC_FAILURE);
+    goto err;
+    }
+
+    if (!BN_bn2bin(d, prk_encoded))
+    {
+    DSTUerr(DSTU_F_DSTU_ASN1_PRIV_ENCODE, ERR_R_BN_LIB);
+    goto err;
+    }
+
+    reverse_bytes(prk_encoded, prk_encoded_bytes);
 
     ASN1_STRING_set0(params, encoded_params, encoded_params_bytes);
 
@@ -327,8 +332,7 @@ static int dstu_asn1_priv_encode(PKCS8_PRIV_KEY_INFO *p8, const EVP_PKEY *pk)
 
     err: if (prk_encoded)
 	OPENSSL_free(prk_encoded);
-    if (asn1key)
-	ASN1_INTEGER_free(asn1key);
+
     if (params)
 	ASN1_STRING_free(params);
 
