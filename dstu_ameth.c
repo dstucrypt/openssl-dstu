@@ -7,6 +7,9 @@
 #include "dstu_key.h"
 #include "dstu_params.h"
 #include <openssl/x509.h>
+#ifndef OPENSSL_NO_CMS
+#include <openssl/cms.h>
+#endif
 #include "dstu_compress.h"
 
 #include "e_dstu_err.h"
@@ -621,6 +624,40 @@ static int dstu_asn1_pkey_ctrl(EVP_PKEY *pkey, int op, long arg1, void *arg2)
     {
     switch (op)
 	{
+	case ASN1_PKEY_CTRL_PKCS7_SIGN:
+		if (arg1 == 0)
+			{
+			X509_ALGOR *alg1 = NULL, *alg2 = NULL;
+			int nid = EVP_PKEY_base_id(pkey);
+			PKCS7_SIGNER_INFO_get0_algs((PKCS7_SIGNER_INFO*)arg2,
+				NULL, &alg1, &alg2);
+			X509_ALGOR_set0(alg1, OBJ_nid2obj(NID_dstu34311),
+				V_ASN1_NULL, 0);
+			if (nid == NID_undef)
+				{
+				return (-1);
+				}
+			X509_ALGOR_set0(alg2, OBJ_nid2obj(nid), V_ASN1_NULL, 0);
+			}
+		return 1;
+#ifndef OPENSSL_NO_CMS
+	case ASN1_PKEY_CTRL_CMS_SIGN:
+		if (arg1 == 0)
+			{
+			X509_ALGOR *alg1 = NULL, *alg2 = NULL;
+			int nid = EVP_PKEY_base_id(pkey);
+			CMS_SignerInfo_get0_algs((CMS_SignerInfo *)arg2,
+				NULL, NULL, &alg1, &alg2);
+			X509_ALGOR_set0(alg1, OBJ_nid2obj(NID_dstu34311),
+				V_ASN1_NULL, 0);
+			if (nid == NID_undef)
+				{
+				return (-1);
+				}
+			X509_ALGOR_set0(alg2, OBJ_nid2obj(nid), V_ASN1_NULL, 0);
+			}
+		return 1;
+#endif
     case ASN1_PKEY_CTRL_DEFAULT_MD_NID:
 	*((int *) arg2) = NID_dstu34311;
 	return 2;
