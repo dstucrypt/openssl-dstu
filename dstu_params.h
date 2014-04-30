@@ -22,6 +22,8 @@ typedef struct dstu_named_curve_st
 extern DSTU_NAMED_CURVE dstu_curves[];
 extern unsigned char default_sbox[64];
 void unpack_sbox(unsigned char* packed_sbox, gost_subst_block* unpacked_sbox);
+void pack_sbox(gost_subst_block* unpacked_sbox, unsigned char* packed_sbox);
+void dstu_get_sbox(gost_ctx *ctx, gost_subst_block* sbox);
 int is_default_sbox(unsigned char* sbox);
 unsigned char* copy_sbox(unsigned char* sbox);
 EC_GROUP* group_from_named_curve(int curve_num);

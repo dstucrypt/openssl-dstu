@@ -78,4 +78,12 @@ typedef struct DSTU_AlgorithmParameters_st
 
 DECLARE_ASN1_FUNCTIONS(DSTU_AlgorithmParameters)
 
+typedef struct DSTU_Gost28147Parameters_st
+	{
+	ASN1_OCTET_STRING* iv;
+	ASN1_OCTET_STRING* dke;
+	} DSTU_Gost28147Parameters;
+
+DECLARE_ASN1_FUNCTIONS(DSTU_Gost28147Parameters)
+
 #endif /* DSTU_ASN1_H_ */

@@ -355,6 +355,27 @@ int curve_nid_from_group(const EC_GROUP* group)
     return nid;
     }
 
+void dstu_get_sbox(gost_ctx *ctx, gost_subst_block* sbox)
+	{
+	int i;
+
+	for (i = 0; i < 256; i++)
+		{
+		sbox->k8[i >> 4] = (ctx->k87[i] >> 28) & 0xf;
+		sbox->k7[i & 15] = (ctx->k87[i] >> 24) & 0xf;
+
+		sbox->k6[i >> 4] = (ctx->k65[i] >> 20) & 0xf;
+		sbox->k5[i & 15] = (ctx->k65[i] >> 16) & 0xf;
+
+		sbox->k4[i >> 4] = (ctx->k43[i] >> 12) & 0xf;
+		sbox->k3[i & 15] = (ctx->k43[i] >> 8) & 0xf;
+
+		sbox->k2[i >> 4] = (ctx->k21[i] >> 4) & 0xf;
+		sbox->k1[i & 15 ] = ctx->k21[i] & 0xf;
+		}
+
+	}
+
 void unpack_sbox(unsigned char* packed_sbox, gost_subst_block* unpacked_sbox)
     {
     int i;
@@ -385,6 +406,23 @@ void unpack_sbox(unsigned char* packed_sbox, gost_subst_block* unpacked_sbox)
 	unpacked_sbox->k8[(2 * i) + 1] = 0x0f & packed_sbox[i + 56];
 	}
     }
+
+void pack_sbox(gost_subst_block* unpacked_sbox, unsigned char* packed_sbox)
+	{
+    int i;
+    for (i = 0; i < 8; i++)
+		{
+    	packed_sbox[i] = ((unpacked_sbox->k1[2 * i] << 4) & 0xf0) | (unpacked_sbox->k1[(2 * i) + 1] & 0x0f);
+    	packed_sbox[i + 8] = ((unpacked_sbox->k2[2 * i] << 4) & 0xf0) | (unpacked_sbox->k2[(2 * i) + 1] & 0x0f);
+    	packed_sbox[i + 16] = ((unpacked_sbox->k3[2 * i] << 4) & 0xf0) | (unpacked_sbox->k3[(2 * i) + 1] & 0x0f);
+    	packed_sbox[i + 24] = ((unpacked_sbox->k4[2 * i] << 4) & 0xf0) | (unpacked_sbox->k4[(2 * i) + 1] & 0x0f);
+    	packed_sbox[i + 32] = ((unpacked_sbox->k5[2 * i] << 4) & 0xf0) | (unpacked_sbox->k5[(2 * i) + 1] & 0x0f);
+    	packed_sbox[i + 40] = ((unpacked_sbox->k6[2 * i] << 4) & 0xf0) | (unpacked_sbox->k6[(2 * i) + 1] & 0x0f);
+    	packed_sbox[i + 48] = ((unpacked_sbox->k7[2 * i] << 4) & 0xf0) | (unpacked_sbox->k7[(2 * i) + 1] & 0x0f);
+    	packed_sbox[i + 56] = ((unpacked_sbox->k8[2 * i] << 4) & 0xf0) | (unpacked_sbox->k8[(2 * i) + 1] & 0x0f);
+
+		}
+	}
 
 unsigned char default_sbox[64] =
     {
