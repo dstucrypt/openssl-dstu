@@ -249,6 +249,15 @@ static int bind_dstu(ENGINE *e, const char *id)
 	return 0;
 	}
 
+    /* Adding our algorithms to support PBKDF2 */
+    if (!EVP_PBE_alg_add_type(EVP_PBE_TYPE_PRF, NID_hmacWithDstu34311, -1, NID_dstu34311, NULL))
+	{
+	DSTUerr(DSTU_F_BIND_DSTU, ERR_R_EVP_LIB);
+	dstu_asn1_meth_finish();
+	dstu_pkey_meth_finish();
+	return 0;
+	}
+
     ERR_load_DSTU_strings();
     return 1;
     }
