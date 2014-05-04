@@ -217,6 +217,7 @@ static int dstu_pkey_sign(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen,
     int field_size, ret = 0, encoded_sig_size;
     ASN1_OCTET_STRING *dstu_sig = NULL;
     unsigned char *sig_data = NULL;
+    BIGNUM *n = NULL;
 
     if (!pkey)
 	{
@@ -238,13 +239,20 @@ static int dstu_pkey_sign(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen,
 	return 0;
 	}
 
-    field_size = (EC_GROUP_get_degree(group) + 7) / 8;
+    n = BN_new();
+    if (!n)
+    	return 0;
+
+    if (!EC_GROUP_get_order(group, n, NULL))
+    	goto err;
+
+    field_size = BN_num_bytes(n);
     encoded_sig_size = EVP_PKEY_size(pkey);
 
     if (encoded_sig_size > *siglen)
 	{
 	*siglen = encoded_sig_size;
-	return 0;
+	goto err;
 	}
 
     *siglen = encoded_sig_size;
@@ -281,6 +289,9 @@ static int dstu_pkey_sign(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen,
     if (dstu_sig)
 	ASN1_OCTET_STRING_free(dstu_sig);
 
+    if (n)
+    	BN_free(n);
+
     return ret;
     }
 
@@ -298,6 +309,7 @@ static int dstu_pkey_verify(EVP_PKEY_CTX *ctx, const unsigned char *sig,
     int field_size, ret = 0;
     unsigned char *sig_be;
     ASN1_OCTET_STRING *dstu_sig = NULL;
+    BIGNUM *n = NULL;
 
     if (!pkey)
 	{
@@ -319,10 +331,20 @@ static int dstu_pkey_verify(EVP_PKEY_CTX *ctx, const unsigned char *sig,
 	return 0;
 	}
 
-    field_size = (EC_GROUP_get_degree(group) + 7) / 8;
+    n = BN_new();
+    if (!n)
+    	return 0;
+
+    if (!EC_GROUP_get_order(group, n, NULL))
+    {
+    DSTUerr(DSTU_F_DSTU_PKEY_VERIFY, DSTU_R_NOT_DSTU_KEY);
+    goto err;
+    }
+
+    field_size = BN_num_bytes(n);
 
     if (!d2i_ASN1_OCTET_STRING(&dstu_sig, &sig, siglen))
-	return 0;
+	goto err;
 
     sig = ASN1_STRING_data(dstu_sig);
     siglen = ASN1_STRING_length(dstu_sig);
@@ -347,7 +369,11 @@ static int dstu_pkey_verify(EVP_PKEY_CTX *ctx, const unsigned char *sig,
     else
 	ret = dstu_do_verify(key->ec, tbs, tbslen, sig, siglen);
 
-    err: if (dstu_sig)
+    err:
+    if (n)
+    	BN_free(n);
+
+    if (dstu_sig)
 	ASN1_OCTET_STRING_free(dstu_sig);
 
     return ret;

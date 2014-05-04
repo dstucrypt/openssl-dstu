@@ -73,8 +73,6 @@ int dstu_do_sign(const EC_KEY* key, const unsigned char *tbs, size_t tbslen,
 	return 0;
 	}
 
-    field_size = (EC_GROUP_get_degree(group) + 7) / 8;
-
     ctx = BN_CTX_new();
     if (!ctx)
 	return 0;
@@ -94,6 +92,8 @@ int dstu_do_sign(const EC_KEY* key, const unsigned char *tbs, size_t tbslen,
 
     if (!EC_GROUP_get_order(group, n, ctx))
 	goto err;
+
+    field_size = BN_num_bytes(n);
 
     if (!EC_GROUP_get_curve_GF2m(group, p, NULL, NULL, ctx))
 	goto err;

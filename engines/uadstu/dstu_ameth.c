@@ -358,8 +358,27 @@ static int dstu_asn1_pkey_bits(const EVP_PKEY *pk)
 
 static int dstu_asn1_pkey_size(const EVP_PKEY *pk)
     {
-    return ASN1_object_size(0, ((dstu_asn1_pkey_bits(pk) + 7) / 8) * 2,
-	    V_ASN1_OCTET_STRING);
+    DSTU_KEY* key = EVP_PKEY_get0((EVP_PKEY *) pk);
+    const EC_GROUP* group;
+    BIGNUM *n = BN_new();
+    int res = 0;
+
+    if (!n)
+    	return 0;
+
+    if (key)
+	{
+	group = EC_KEY_get0_group(key->ec);
+	if (group)
+		{
+	    if (EC_GROUP_get_order(group, n, NULL))
+	    	res = ASN1_object_size(0, BN_num_bytes(n) * 2,
+	    		    V_ASN1_OCTET_STRING);
+		}
+	}
+
+    BN_free(n);
+    return res;
     }
 
 void dstu_asn1_pkey_free(EVP_PKEY *pkey)
