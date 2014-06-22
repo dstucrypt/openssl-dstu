@@ -17,12 +17,12 @@ static int initialized = 0;
 #define DSTU_RGB_SEED_SIZE 40
 
 /* We will reuse OPENSSL's default seeding logic and entropy collecting and will use its default RNG as a seeder */
-static int dstu_rbg_add(const void *buf, int num, double entropy)
+static void dstu_rbg_add(const void *buf, int num, double entropy)
     {
     return RAND_SSLeay()->add(buf, num, entropy);
     }
 
-static int dstu_rbg_seed(const void *buf, int num)
+static void dstu_rbg_seed(const void *buf, int num)
     {
     return RAND_SSLeay()->seed(buf, num);
     }
