@@ -62,12 +62,12 @@
  * [including the GNU Public Licence.]
  */
 
-#define NUM_NID 920
-#define NUM_SN 913
-#define NUM_LN 913
-#define NUM_OBJ 857
+#define NUM_NID 940
+#define NUM_SN 933
+#define NUM_LN 933
+#define NUM_OBJ 877
 
-static const unsigned char lvalues[5980]={
+static const unsigned char lvalues[6207]={
 0x00,                                        /* [  0] OBJ_undef */
 0x2A,0x86,0x48,0x86,0xF7,0x0D,               /* [  1] OBJ_rsadsi */
 0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,          /* [  7] OBJ_pkcs */
@@ -925,6 +925,26 @@ static const unsigned char lvalues[5980]={
 0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,0x01,0x08,/* [5952] OBJ_mgf1 */
 0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,0x01,0x0A,/* [5961] OBJ_rsassaPss */
 0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,0x01,0x07,/* [5970] OBJ_rsaesOaep */
+0x2A,0x86,0x24,                              /* [5979] OBJ_ISO_UA */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,          /* [5982] OBJ_ua_pki */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x01,0x01,/* [5989] OBJ_dstu28147 */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x01,0x01,0x02,/* [5999] OBJ_dstu28147_ofb */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x01,0x01,0x03,/* [6010] OBJ_dstu28147_cfb */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x01,0x01,0x05,/* [6021] OBJ_dstu28147_wrap */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x01,0x02,/* [6032] OBJ_hmacWithDstu34311 */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x02,0x01,/* [6042] OBJ_dstu34311 */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x03,0x01,0x01,/* [6052] OBJ_dstu4145le */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x03,0x01,0x01,0x01,0x01,/* [6063] OBJ_dstu4145be */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x03,0x01,0x01,0x02,0x00,/* [6076] OBJ_uacurve0 */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x03,0x01,0x01,0x02,0x01,/* [6089] OBJ_uacurve1 */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x03,0x01,0x01,0x02,0x02,/* [6102] OBJ_uacurve2 */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x03,0x01,0x01,0x02,0x03,/* [6115] OBJ_uacurve3 */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x03,0x01,0x01,0x02,0x04,/* [6128] OBJ_uacurve4 */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x03,0x01,0x01,0x02,0x05,/* [6141] OBJ_uacurve5 */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x03,0x01,0x01,0x02,0x06,/* [6154] OBJ_uacurve6 */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x03,0x01,0x01,0x02,0x07,/* [6167] OBJ_uacurve7 */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x03,0x01,0x01,0x02,0x08,/* [6180] OBJ_uacurve8 */
+0x2A,0x86,0x24,0x02,0x01,0x01,0x01,0x01,0x03,0x01,0x01,0x02,0x09,/* [6193] OBJ_uacurve9 */
 };
 
 static const ASN1_OBJECT nid_objs[NUM_NID]={
@@ -2406,6 +2426,32 @@ static const ASN1_OBJECT nid_objs[NUM_NID]={
 {"AES-256-CBC-HMAC-SHA1","aes-256-cbc-hmac-sha1",
 	NID_aes_256_cbc_hmac_sha1,0,NULL,0},
 {"RSAES-OAEP","rsaesOaep",NID_rsaesOaep,9,&(lvalues[5970]),0},
+{"ISO-UA","ISO-UA",NID_ISO_UA,3,&(lvalues[5979]),0},
+{"ua-pki","ua-pki",NID_ua_pki,7,&(lvalues[5982]),0},
+{"dstu28147","DSTU Gost 28147-2009",NID_dstu28147,10,&(lvalues[5989]),0},
+{"dstu28147-ofb","DSTU Gost 28147-2009 OFB mode",NID_dstu28147_ofb,11,
+	&(lvalues[5999]),0},
+{"dstu28147-cfb","DSTU Gost 28147-2009 CFB mode",NID_dstu28147_cfb,11,
+	&(lvalues[6010]),0},
+{"dstu28147-wrap","DSTU Gost 28147-2009 key wrap",NID_dstu28147_wrap,
+	11,&(lvalues[6021]),0},
+{"hmacWithDstu34311","HMAC DSTU Gost 34311-95",NID_hmacWithDstu34311,
+	10,&(lvalues[6032]),0},
+{"dstu34311","DSTU Gost 34311-95",NID_dstu34311,10,&(lvalues[6042]),0},
+{"dstu4145le","DSTU 4145-2002 little endian",NID_dstu4145le,11,
+	&(lvalues[6052]),0},
+{"dstu4145be","DSTU 4145-2002 big endian",NID_dstu4145be,13,
+	&(lvalues[6063]),0},
+{"uacurve0","DSTU curve 0",NID_uacurve0,13,&(lvalues[6076]),0},
+{"uacurve1","DSTU curve 1",NID_uacurve1,13,&(lvalues[6089]),0},
+{"uacurve2","DSTU curve 2",NID_uacurve2,13,&(lvalues[6102]),0},
+{"uacurve3","DSTU curve 3",NID_uacurve3,13,&(lvalues[6115]),0},
+{"uacurve4","DSTU curve 4",NID_uacurve4,13,&(lvalues[6128]),0},
+{"uacurve5","DSTU curve 5",NID_uacurve5,13,&(lvalues[6141]),0},
+{"uacurve6","DSTU curve 6",NID_uacurve6,13,&(lvalues[6154]),0},
+{"uacurve7","DSTU curve 7",NID_uacurve7,13,&(lvalues[6167]),0},
+{"uacurve8","DSTU curve 8",NID_uacurve8,13,&(lvalues[6180]),0},
+{"uacurve9","DSTU curve 9",NID_uacurve9,13,&(lvalues[6193]),0},
 };
 
 static const unsigned int sn_objs[NUM_SN]={
@@ -2504,6 +2550,7 @@ static const unsigned int sn_objs[NUM_SN]={
 36,	/* "IDEA-ECB" */
 46,	/* "IDEA-OFB" */
 181,	/* "ISO" */
+920,	/* "ISO-UA" */
 183,	/* "ISO-US" */
 645,	/* "ITU-T" */
 646,	/* "JOINT-ISO-ITU-T" */
@@ -2691,6 +2738,13 @@ static const unsigned int sn_objs[NUM_SN]={
 452,	/* "domainRelatedObject" */
 802,	/* "dsa_with_SHA224" */
 803,	/* "dsa_with_SHA256" */
+922,	/* "dstu28147" */
+924,	/* "dstu28147-cfb" */
+923,	/* "dstu28147-ofb" */
+925,	/* "dstu28147-wrap" */
+927,	/* "dstu34311" */
+929,	/* "dstu4145be" */
+928,	/* "dstu4145le" */
 791,	/* "ecdsa-with-Recommended" */
 416,	/* "ecdsa-with-SHA1" */
 793,	/* "ecdsa-with-SHA224" */
@@ -2721,6 +2775,7 @@ static const unsigned int sn_objs[NUM_SN]={
 814,	/* "gost89-cnt" */
 812,	/* "gost94" */
 850,	/* "gost94cc" */
+926,	/* "hmacWithDstu34311" */
 797,	/* "hmacWithMD5" */
 163,	/* "hmacWithSHA1" */
 798,	/* "hmacWithSHA224" */
@@ -3296,6 +3351,17 @@ static const unsigned int sn_objs[NUM_SN]={
 106,	/* "title" */
 682,	/* "tpBasis" */
 375,	/* "trustRoot" */
+921,	/* "ua-pki" */
+930,	/* "uacurve0" */
+931,	/* "uacurve1" */
+932,	/* "uacurve2" */
+933,	/* "uacurve3" */
+934,	/* "uacurve4" */
+935,	/* "uacurve5" */
+936,	/* "uacurve6" */
+937,	/* "uacurve7" */
+938,	/* "uacurve8" */
+939,	/* "uacurve9" */
 436,	/* "ucl" */
 888,	/* "uniqueMember" */
 55,	/* "unstructuredAddress" */
@@ -3336,6 +3402,23 @@ static const unsigned int ln_objs[NUM_LN]={
 179,	/* "CA Issuers" */
 785,	/* "CA Repository" */
 131,	/* "Code Signing" */
+929,	/* "DSTU 4145-2002 big endian" */
+928,	/* "DSTU 4145-2002 little endian" */
+922,	/* "DSTU Gost 28147-2009" */
+924,	/* "DSTU Gost 28147-2009 CFB mode" */
+923,	/* "DSTU Gost 28147-2009 OFB mode" */
+925,	/* "DSTU Gost 28147-2009 key wrap" */
+927,	/* "DSTU Gost 34311-95" */
+930,	/* "DSTU curve 0" */
+931,	/* "DSTU curve 1" */
+932,	/* "DSTU curve 2" */
+933,	/* "DSTU curve 3" */
+934,	/* "DSTU curve 4" */
+935,	/* "DSTU curve 5" */
+936,	/* "DSTU curve 6" */
+937,	/* "DSTU curve 7" */
+938,	/* "DSTU curve 8" */
+939,	/* "DSTU curve 9" */
 783,	/* "Diffie-Hellman based MAC" */
 382,	/* "Directory" */
 392,	/* "Domain" */
@@ -3360,6 +3443,7 @@ static const unsigned int ln_objs[NUM_LN]={
 808,	/* "GOST R 34.11-94 with GOST R 34.10-94" */
 852,	/* "GOST R 34.11-94 with GOST R 34.10-94 Cryptocom" */
 854,	/* "GOST R 3410-2001 Parameter Set Cryptocom" */
+926,	/* "HMAC DSTU Gost 34311-95" */
 810,	/* "HMAC GOST 34.11-94" */
 432,	/* "Hold Instruction Call Issuer" */
 430,	/* "Hold Instruction Code" */
@@ -3371,6 +3455,7 @@ static const unsigned int ln_objs[NUM_LN]={
 296,	/* "IPSec User" */
 182,	/* "ISO Member Body" */
 183,	/* "ISO US Member Body" */
+920,	/* "ISO-UA" */
 667,	/* "Independent" */
 665,	/* "Inherit all" */
 647,	/* "International Organizations" */
@@ -4209,6 +4294,7 @@ static const unsigned int ln_objs[NUM_LN]={
 293,	/* "textNotice" */
 106,	/* "title" */
 682,	/* "tpBasis" */
+921,	/* "ua-pki" */
 436,	/* "ucl" */
  0,	/* "undefined" */
 888,	/* "uniqueMember" */
@@ -4260,6 +4346,7 @@ static const unsigned int obj_objs[NUM_OBJ]={
 512,	/* OBJ_id_set                       2 23 42 */
 678,	/* OBJ_wap                          2 23 43 */
 435,	/* OBJ_pss                          0 9 2342 */
+920,	/* OBJ_ISO_UA                       1 2 804 */
 183,	/* OBJ_ISO_US                       1 2 840 */
 381,	/* OBJ_iana                         1 3 6 1 */
 677,	/* OBJ_certicom_arc                 1 3 132 */
@@ -4603,6 +4690,7 @@ static const unsigned int obj_objs[NUM_OBJ]={
 842,	/* OBJ_id_GostR3410_2001_CryptoPro_C_ParamSet 1 2 643 2 2 35 3 */
 843,	/* OBJ_id_GostR3410_2001_CryptoPro_XchA_ParamSet 1 2 643 2 2 36 0 */
 844,	/* OBJ_id_GostR3410_2001_CryptoPro_XchB_ParamSet 1 2 643 2 2 36 1 */
+921,	/* OBJ_ua_pki                       1 2 804 2 1 1 1 */
  2,	/* OBJ_pkcs                         1 2 840 113549 1 */
 431,	/* OBJ_hold_instruction_none        1 2 840 10040 2 1 */
 432,	/* OBJ_hold_instruction_call_issuer 1 2 840 10040 2 2 */
@@ -4996,6 +5084,9 @@ static const unsigned int obj_objs[NUM_OBJ]={
 455,	/* OBJ_pilotOrganization            0 9 2342 19200300 100 4 20 */
 456,	/* OBJ_pilotDSA                     0 9 2342 19200300 100 4 21 */
 457,	/* OBJ_qualityLabelledData          0 9 2342 19200300 100 4 22 */
+922,	/* OBJ_dstu28147                    1 2 804 2 1 1 1 1 1 1 */
+926,	/* OBJ_hmacWithDstu34311            1 2 804 2 1 1 1 1 1 2 */
+927,	/* OBJ_dstu34311                    1 2 804 2 1 1 1 1 2 1 */
 189,	/* OBJ_id_smime_mod                 1 2 840 113549 1 9 16 0 */
 190,	/* OBJ_id_smime_ct                  1 2 840 113549 1 9 16 1 */
 191,	/* OBJ_id_smime_aa                  1 2 840 113549 1 9 16 2 */
@@ -5026,6 +5117,10 @@ static const unsigned int obj_objs[NUM_OBJ]={
 907,	/* OBJ_id_camellia128_wrap          1 2 392 200011 61 1 1 3 2 */
 908,	/* OBJ_id_camellia192_wrap          1 2 392 200011 61 1 1 3 3 */
 909,	/* OBJ_id_camellia256_wrap          1 2 392 200011 61 1 1 3 4 */
+923,	/* OBJ_dstu28147_ofb                1 2 804 2 1 1 1 1 1 1 2 */
+924,	/* OBJ_dstu28147_cfb                1 2 804 2 1 1 1 1 1 1 3 */
+925,	/* OBJ_dstu28147_wrap               1 2 804 2 1 1 1 1 1 1 5 */
+928,	/* OBJ_dstu4145le                   1 2 804 2 1 1 1 1 3 1 1 */
 196,	/* OBJ_id_smime_mod_cms             1 2 840 113549 1 9 16 0 1 */
 197,	/* OBJ_id_smime_mod_ess             1 2 840 113549 1 9 16 0 2 */
 198,	/* OBJ_id_smime_mod_oid             1 2 840 113549 1 9 16 0 3 */
@@ -5098,5 +5193,16 @@ static const unsigned int obj_objs[NUM_OBJ]={
 154,	/* OBJ_secretBag                    1 2 840 113549 1 12 10 1 5 */
 155,	/* OBJ_safeContentsBag              1 2 840 113549 1 12 10 1 6 */
 34,	/* OBJ_idea_cbc                     1 3 6 1 4 1 188 7 1 1 2 */
+929,	/* OBJ_dstu4145be                   1 2 804 2 1 1 1 1 3 1 1 1 1 */
+930,	/* OBJ_uacurve0                     1 2 804 2 1 1 1 1 3 1 1 2 0 */
+931,	/* OBJ_uacurve1                     1 2 804 2 1 1 1 1 3 1 1 2 1 */
+932,	/* OBJ_uacurve2                     1 2 804 2 1 1 1 1 3 1 1 2 2 */
+933,	/* OBJ_uacurve3                     1 2 804 2 1 1 1 1 3 1 1 2 3 */
+934,	/* OBJ_uacurve4                     1 2 804 2 1 1 1 1 3 1 1 2 4 */
+935,	/* OBJ_uacurve5                     1 2 804 2 1 1 1 1 3 1 1 2 5 */
+936,	/* OBJ_uacurve6                     1 2 804 2 1 1 1 1 3 1 1 2 6 */
+937,	/* OBJ_uacurve7                     1 2 804 2 1 1 1 1 3 1 1 2 7 */
+938,	/* OBJ_uacurve8                     1 2 804 2 1 1 1 1 3 1 1 2 8 */
+939,	/* OBJ_uacurve9                     1 2 804 2 1 1 1 1 3 1 1 2 9 */
 };
 

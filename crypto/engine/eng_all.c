@@ -113,6 +113,9 @@ void ENGINE_load_builtin_engines(void)
 #ifndef OPENSSL_NO_GOST
 	ENGINE_load_gost();
 #endif
+#ifndef OPENSSL_NO_DSTU
+	ENGINE_load_dstu();
+#endif
 #ifndef OPENSSL_NO_GMP
 	ENGINE_load_gmp();
 #endif

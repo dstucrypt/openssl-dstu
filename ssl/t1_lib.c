@@ -325,6 +325,12 @@ int tls1_ec_nid2curve_id(int nid)
 #define tlsext_sigalg_ecdsa(md) md, TLSEXT_signature_ecdsa,
 #endif
 
+#ifdef OPENSSL_NO_DSTU
+#define tlsext_sigalg_dstu(md) /* */
+#else
+#define tlsext_sigalg_dstu(md) md, TLSEXT_signature_dstu,
+#endif
+
 #define tlsext_sigalg(md) \
 		tlsext_sigalg_rsa(md) \
 		tlsext_sigalg_dsa(md) \
@@ -344,6 +350,9 @@ static unsigned char tls12_sigalgs[] = {
 #endif
 #ifndef OPENSSL_NO_MD5
 	tlsext_sigalg_rsa(TLSEXT_hash_md5)
+#endif
+#ifndef OPENSSL_NO_DSTU
+	tlsext_sigalg_dstu(TLSEXT_hash_dstu)
 #endif
 };
 
@@ -2298,7 +2307,10 @@ static tls12_lookup tls12_md[] = {
 #endif
 #ifndef OPENSSL_NO_SHA512
 	{NID_sha384, TLSEXT_hash_sha384},
-	{NID_sha512, TLSEXT_hash_sha512}
+	{NID_sha512, TLSEXT_hash_sha512},
+#endif
+#ifndef OPENSSL_NO_DSTU
+	{NID_dstu34311, TLSEXT_hash_dstu},
 #endif
 };
 
@@ -2310,7 +2322,10 @@ static tls12_lookup tls12_sig[] = {
 	{EVP_PKEY_DSA, TLSEXT_signature_dsa},
 #endif
 #ifndef OPENSSL_NO_ECDSA
-	{EVP_PKEY_EC, TLSEXT_signature_ecdsa}
+	{EVP_PKEY_EC, TLSEXT_signature_ecdsa},
+#endif
+#ifndef OPENSSL_NO_DSTU
+	{NID_dstu4145le, TLSEXT_signature_dstu},
 #endif
 };
 
@@ -2390,6 +2405,10 @@ const EVP_MD *tls12_get_hash(unsigned char hash_alg)
 		case TLSEXT_hash_sha512:
 		return EVP_sha512();
 #endif
+#ifndef OPENSSL_NO_DSTU
+		case TLSEXT_hash_dstu:
+		return EVP_get_digestbyname(SN_dstu34311);
+#endif
 		default:
 		return NULL;
 
@@ -2434,6 +2453,11 @@ int tls1_process_sigalgs(SSL *s, const unsigned char *data, int dsize)
 #ifndef OPENSSL_NO_ECDSA
 			case TLSEXT_signature_ecdsa:
 			idx = SSL_PKEY_ECC;
+			break;
+#endif
+#ifndef OPENSSL_NO_DSTU
+			case TLSEXT_signature_dstu:
+			idx = SSL_PKEY_DSTU;
 			break;
 #endif
 			default:

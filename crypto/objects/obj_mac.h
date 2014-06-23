@@ -4030,3 +4030,101 @@
 #define LN_aes_256_cbc_hmac_sha1		"aes-256-cbc-hmac-sha1"
 #define NID_aes_256_cbc_hmac_sha1		918
 
+#define SN_ISO_UA		"ISO-UA"
+#define NID_ISO_UA		920
+#define OBJ_ISO_UA		OBJ_member_body,804L
+
+#define SN_ua_pki		"ua-pki"
+#define NID_ua_pki		921
+#define OBJ_ua_pki		OBJ_ISO_UA,2L,1L,1L,1L
+
+#define SN_dstu28147		"dstu28147"
+#define LN_dstu28147		"DSTU Gost 28147-2009"
+#define NID_dstu28147		922
+#define OBJ_dstu28147		OBJ_ua_pki,1L,1L,1L
+
+#define SN_dstu28147_ofb		"dstu28147-ofb"
+#define LN_dstu28147_ofb		"DSTU Gost 28147-2009 OFB mode"
+#define NID_dstu28147_ofb		923
+#define OBJ_dstu28147_ofb		OBJ_dstu28147,2L
+
+#define SN_dstu28147_cfb		"dstu28147-cfb"
+#define LN_dstu28147_cfb		"DSTU Gost 28147-2009 CFB mode"
+#define NID_dstu28147_cfb		924
+#define OBJ_dstu28147_cfb		OBJ_dstu28147,3L
+
+#define SN_dstu28147_wrap		"dstu28147-wrap"
+#define LN_dstu28147_wrap		"DSTU Gost 28147-2009 key wrap"
+#define NID_dstu28147_wrap		925
+#define OBJ_dstu28147_wrap		OBJ_dstu28147,5L
+
+#define SN_hmacWithDstu34311		"hmacWithDstu34311"
+#define LN_hmacWithDstu34311		"HMAC DSTU Gost 34311-95"
+#define NID_hmacWithDstu34311		926
+#define OBJ_hmacWithDstu34311		OBJ_ua_pki,1L,1L,2L
+
+#define SN_dstu34311		"dstu34311"
+#define LN_dstu34311		"DSTU Gost 34311-95"
+#define NID_dstu34311		927
+#define OBJ_dstu34311		OBJ_ua_pki,1L,2L,1L
+
+#define SN_dstu4145le		"dstu4145le"
+#define LN_dstu4145le		"DSTU 4145-2002 little endian"
+#define NID_dstu4145le		928
+#define OBJ_dstu4145le		OBJ_ua_pki,1L,3L,1L,1L
+
+#define SN_dstu4145be		"dstu4145be"
+#define LN_dstu4145be		"DSTU 4145-2002 big endian"
+#define NID_dstu4145be		929
+#define OBJ_dstu4145be		OBJ_dstu4145le,1L,1L
+
+#define SN_uacurve0		"uacurve0"
+#define LN_uacurve0		"DSTU curve 0"
+#define NID_uacurve0		930
+#define OBJ_uacurve0		OBJ_dstu4145le,2L,0L
+
+#define SN_uacurve1		"uacurve1"
+#define LN_uacurve1		"DSTU curve 1"
+#define NID_uacurve1		931
+#define OBJ_uacurve1		OBJ_dstu4145le,2L,1L
+
+#define SN_uacurve2		"uacurve2"
+#define LN_uacurve2		"DSTU curve 2"
+#define NID_uacurve2		932
+#define OBJ_uacurve2		OBJ_dstu4145le,2L,2L
+
+#define SN_uacurve3		"uacurve3"
+#define LN_uacurve3		"DSTU curve 3"
+#define NID_uacurve3		933
+#define OBJ_uacurve3		OBJ_dstu4145le,2L,3L
+
+#define SN_uacurve4		"uacurve4"
+#define LN_uacurve4		"DSTU curve 4"
+#define NID_uacurve4		934
+#define OBJ_uacurve4		OBJ_dstu4145le,2L,4L
+
+#define SN_uacurve5		"uacurve5"
+#define LN_uacurve5		"DSTU curve 5"
+#define NID_uacurve5		935
+#define OBJ_uacurve5		OBJ_dstu4145le,2L,5L
+
+#define SN_uacurve6		"uacurve6"
+#define LN_uacurve6		"DSTU curve 6"
+#define NID_uacurve6		936
+#define OBJ_uacurve6		OBJ_dstu4145le,2L,6L
+
+#define SN_uacurve7		"uacurve7"
+#define LN_uacurve7		"DSTU curve 7"
+#define NID_uacurve7		937
+#define OBJ_uacurve7		OBJ_dstu4145le,2L,7L
+
+#define SN_uacurve8		"uacurve8"
+#define LN_uacurve8		"DSTU curve 8"
+#define NID_uacurve8		938
+#define OBJ_uacurve8		OBJ_dstu4145le,2L,8L
+
+#define SN_uacurve9		"uacurve9"
+#define LN_uacurve9		"DSTU curve 9"
+#define NID_uacurve9		939
+#define OBJ_uacurve9		OBJ_dstu4145le,2L,9L
+

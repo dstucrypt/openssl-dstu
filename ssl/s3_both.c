@@ -594,6 +594,10 @@ int ssl_cert_type(X509 *x, EVP_PKEY *pkey)
 		{
 		ret = SSL_PKEY_GOST01;
 		}
+	else if (i == NID_dstu4145le)
+		{
+		ret = SSL_PKEY_DSTU;
+		}
 err:
 	if(!pkey) EVP_PKEY_free(pk);
 	return(ret);

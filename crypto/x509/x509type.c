@@ -96,6 +96,9 @@ int X509_certificate_type(X509 *x, EVP_PKEY *pkey)
 	case NID_id_GostR3410_2001:
 		ret=EVP_PKT_EXCH|EVP_PKT_SIGN;
 		break;
+	case NID_dstu4145le:
+		ret=EVP_PKT_SIGN;
+		break;
 	default:
 		break;
 		}

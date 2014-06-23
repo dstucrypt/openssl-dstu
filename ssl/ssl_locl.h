@@ -311,6 +311,7 @@
 #define SSL_aPSK                0x00000080L /* PSK auth */
 #define SSL_aGOST94				0x00000100L /* GOST R 34.10-94 signature auth */
 #define SSL_aGOST01 			0x00000200L /* GOST R 34.10-2001 signature auth */
+#define SSL_aDSTU 				0x00000400L /* DSTU 4145-2002 signature auth */
 
 
 /* Bits for algorithm_enc (symmetric encryption) */
@@ -328,6 +329,7 @@
 #define SSL_SEED		0x00000800L
 #define SSL_AES128GCM		0x00001000L
 #define SSL_AES256GCM		0x00002000L
+#define SSL_eDSTU		0x00004000L
 
 #define SSL_AES        		(SSL_AES128|SSL_AES256|SSL_AES128GCM|SSL_AES256GCM)
 #define SSL_CAMELLIA		(SSL_CAMELLIA128|SSL_CAMELLIA256)
@@ -343,6 +345,7 @@
 #define SSL_SHA384		0x00000020L
 /* Not a real MAC, just an indication it is part of cipher */
 #define SSL_AEAD		0x00000040L
+#define SSL_DSTU95		0x00000080L
 
 /* Bits for algorithm_ssl (protocol version) */
 #define SSL_SSLV2		0x00000001L
@@ -358,11 +361,12 @@
 #define SSL_HANDSHAKE_MAC_GOST94 0x40
 #define SSL_HANDSHAKE_MAC_SHA256 0x80
 #define SSL_HANDSHAKE_MAC_SHA384 0x100
+#define SSL_HANDSHAKE_MAC_DSTU 0x200
 #define SSL_HANDSHAKE_MAC_DEFAULT (SSL_HANDSHAKE_MAC_MD5 | SSL_HANDSHAKE_MAC_SHA)
 
 /* When adding new digest in the ssl_ciph.c and increment SSM_MD_NUM_IDX
  * make sure to update this constant too */
-#define SSL_MAX_DIGEST 6
+#define SSL_MAX_DIGEST 7
 
 #define TLS1_PRF_DGST_MASK	(0xff << TLS1_PRF_DGST_SHIFT)
 
@@ -372,6 +376,7 @@
 #define TLS1_PRF_SHA256 (SSL_HANDSHAKE_MAC_SHA256 << TLS1_PRF_DGST_SHIFT)
 #define TLS1_PRF_SHA384 (SSL_HANDSHAKE_MAC_SHA384 << TLS1_PRF_DGST_SHIFT)
 #define TLS1_PRF_GOST94 (SSL_HANDSHAKE_MAC_GOST94 << TLS1_PRF_DGST_SHIFT)
+#define TLS1_PRF_DSTU (SSL_HANDSHAKE_MAC_DSTU << TLS1_PRF_DGST_SHIFT)
 #define TLS1_PRF (TLS1_PRF_MD5 | TLS1_PRF_SHA1)
 
 /* Stream MAC for GOST ciphersuites from cryptopro draft
@@ -452,7 +457,8 @@
 #define SSL_PKEY_ECC            5
 #define SSL_PKEY_GOST94		6
 #define SSL_PKEY_GOST01		7
-#define SSL_PKEY_NUM		8
+#define SSL_PKEY_DSTU		8
+#define SSL_PKEY_NUM		9
 
 /* SSL_kRSA <- RSA_ENC | (RSA_TMP & RSA_SIGN) |
  * 	    <- (EXPORT & (RSA_ENC | RSA_TMP) & RSA_SIGN)
