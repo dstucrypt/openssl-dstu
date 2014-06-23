@@ -267,6 +267,7 @@ extern "C" {
 # define SSL_TXT_aGOST94 "aGOST94"
 # define SSL_TXT_aGOST01 "aGOST01"
 # define SSL_TXT_aGOST  "aGOST"
+# define SSL_TXT_aDSTU "aDSTU"
 # define SSL_TXT_aSRP            "aSRP"
 
 # define SSL_TXT_DSS             "DSS"
@@ -305,6 +306,7 @@ extern "C" {
 # define SSL_TXT_GOST89MAC               "GOST89MAC"
 # define SSL_TXT_SHA256          "SHA256"
 # define SSL_TXT_SHA384          "SHA384"
+# define SSL_TXT_DSTU95          "DSTU95"
 
 # define SSL_TXT_SSLV2           "SSLv2"
 # define SSL_TXT_SSLV3           "SSLv3"

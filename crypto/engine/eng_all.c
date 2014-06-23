@@ -119,6 +119,9 @@ void ENGINE_load_builtin_engines(void)
 # if defined(OPENSSL_SYS_WIN32) && !defined(OPENSSL_NO_CAPIENG)
     ENGINE_load_capi();
 # endif
+#ifndef OPENSSL_NO_DSTU
+	ENGINE_load_dstu();
+#endif
 #endif
     ENGINE_register_all_complete();
 }

@@ -411,6 +411,9 @@ void ENGINE_load_gmp(void);
 #  ifndef OPENSSL_NO_GOST
 void ENGINE_load_gost(void);
 #  endif
+#  ifndef OPENSSL_NO_DSTU
+void ENGINE_load_dstu(void);
+#  endif
 # endif
 void ENGINE_load_cryptodev(void);
 void ENGINE_load_rdrand(void);

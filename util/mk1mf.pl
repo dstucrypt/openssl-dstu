@@ -286,6 +286,7 @@ $cflags.=" -DOPENSSL_NO_EC"   if $no_ec;
 $cflags.=" -DOPENSSL_NO_ECDSA" if $no_ecdsa;
 $cflags.=" -DOPENSSL_NO_ECDH" if $no_ecdh;
 $cflags.=" -DOPENSSL_NO_GOST" if $no_gost;
+$cflags.=" -DOPENSSL_NO_DSTU" if $no_dstu;
 $cflags.=" -DOPENSSL_NO_ENGINE"   if $no_engine;
 $cflags.=" -DOPENSSL_NO_HW"   if $no_hw;
 $cflags.=" -DOPENSSL_FIPS"    if $fips;
@@ -851,6 +852,7 @@ sub var_add
 	return("") if $no_dh   && $dir =~ /\/dh/;
 	return("") if $no_ec   && $dir =~ /\/ec/;
 	return("") if $no_gost   && $dir =~ /\/ccgost/;
+	return("") if $no_dstu   && $dir =~ /\/uadstu/;
 	return("") if $no_cms  && $dir =~ /\/cms/;
 	return("") if $no_jpake  && $dir =~ /\/jpake/;
 	return("") if $no_comp && $dir =~ /\/comp/;
@@ -1221,6 +1223,7 @@ sub read_options
 		"no-ecdsa" => \$no_ecdsa,
 		"no-ecdh" => \$no_ecdh,
 		"no-gost" => \$no_gost,
+		"no-dstu" => \$no_dstu,
 		"no-engine" => \$no_engine,
 		"no-hw" => \$no_hw,
 		"no-rsax" => 0,

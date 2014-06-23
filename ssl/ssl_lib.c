@@ -2323,6 +2323,10 @@ void ssl_set_cert_masks(CERT *c, const SSL_CIPHER *cipher)
         mask_k |= SSL_kGOST;
         mask_a |= SSL_aGOST94;
     }
+	cpk = &(c->pkeys[SSL_PKEY_DSTU]);
+	if (cpk->x509 != NULL && cpk->privatekey !=NULL) {
+		mask_a |= SSL_aDSTU;
+	}
 
     if (rsa_enc || (rsa_tmp && rsa_sign))
         mask_k |= SSL_kRSA;
@@ -2598,6 +2602,9 @@ EVP_PKEY *ssl_get_sign_pkey(SSL *s, const SSL_CIPHER *cipher,
     } else if ((alg_a & SSL_aECDSA) &&
                (c->pkeys[SSL_PKEY_ECC].privatekey != NULL))
         idx = SSL_PKEY_ECC;
+    else if ((alg_a & SSL_aDSTU) &&
+			   (c->pkeys[SSL_PKEY_DSTU].privatekey != NULL))
+		idx = SSL_PKEY_DSTU;
     if (idx == -1) {
         SSLerr(SSL_F_SSL_GET_SIGN_PKEY, ERR_R_INTERNAL_ERROR);
         return (NULL);

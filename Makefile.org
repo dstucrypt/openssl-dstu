@@ -138,7 +138,7 @@ FIPSCANLIB=
 BASEADDR=
 
 DIRS=   crypto ssl engines apps test tools
-ENGDIRS= ccgost
+ENGDIRS= ccgost uadstu
 SHLIBDIRS= crypto ssl
 
 # dirs in crypto to build

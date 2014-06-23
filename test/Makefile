@@ -74,6 +74,7 @@ BADDTLSTEST=	bad_dtls_test
 SSLV2CONFTEST = 	sslv2conftest
 DTLSTEST =	dtlstest
 FATALERRTEST =	fatalerrtest
+DSTUTEST=	dstutest
 
 TESTS=		alltests
 
@@ -83,6 +84,7 @@ EXE=	$(BNTEST)$(EXE_EXT) $(ECTEST)$(EXE_EXT)  $(ECDSATEST)$(EXE_EXT) $(ECDHTEST)
 	$(DESTEST)$(EXE_EXT) $(SHATEST)$(EXE_EXT) $(SHA1TEST)$(EXE_EXT) $(SHA256TEST)$(EXE_EXT) $(SHA512TEST)$(EXE_EXT) \
 	$(MDC2TEST)$(EXE_EXT) $(RMDTEST)$(EXE_EXT) \
 	$(RANDTEST)$(EXE_EXT) $(DHTEST)$(EXE_EXT) $(ENGINETEST)$(EXE_EXT) \
+	$(DSTUTEST)$(EXE_EXT) \
 	$(BFTEST)$(EXE_EXT) $(CASTTEST)$(EXE_EXT) $(SSLTEST)$(EXE_EXT) $(EXPTEST)$(EXE_EXT) $(DSATEST)$(EXE_EXT) $(RSATEST)$(EXE_EXT) \
 	$(EVPTEST)$(EXE_EXT) $(EVPEXTRATEST)$(EXE_EXT) $(IGETEST)$(EXE_EXT) $(JPAKETEST)$(EXE_EXT) $(SRPTEST)$(EXE_EXT) \
 	$(ASN1TEST)$(EXE_EXT) $(V3NAMETEST)$(EXE_EXT) $(HEARTBEATTEST)$(EXE_EXT) \
@@ -103,7 +105,8 @@ OBJ=	$(BNTEST).o $(ECTEST).o  $(ECDSATEST).o $(ECDHTEST).o $(IDEATEST).o \
 	$(EVPTEST).o $(EVPEXTRATEST).o $(IGETEST).o $(JPAKETEST).o $(ASN1TEST).o $(V3NAMETEST).o \
 	$(HEARTBEATTEST).o $(CONSTTIMETEST).o $(VERIFYEXTRATEST).o \
 	$(CLIENTHELLOTEST).o  $(SSLV2CONFTEST).o $(DTLSTEST).o ssltestlib.o \
-	$(BADDTLSTEST).o $(FATALERRTEST).o
+	$(BADDTLSTEST).o $(FATALERRTEST).o \
+	$(DSTUTEST).o
 
 SRC=	$(BNTEST).c $(ECTEST).c  $(ECDSATEST).c $(ECDHTEST).c $(IDEATEST).c \
 	$(MD2TEST).c  $(MD4TEST).c $(MD5TEST).c \
@@ -115,7 +118,8 @@ SRC=	$(BNTEST).c $(ECTEST).c  $(ECDSATEST).c $(ECDHTEST).c $(IDEATEST).c \
 	$(EVPTEST).c $(EVPEXTRATEST).c $(IGETEST).c $(JPAKETEST).c $(SRPTEST).c $(ASN1TEST).c \
 	$(V3NAMETEST).c $(HEARTBEATTEST).c $(CONSTTIMETEST).c $(VERIFYEXTRATEST).c \
 	$(CLIENTHELLOTEST).c  $(SSLV2CONFTEST).c $(DTLSTEST).c ssltestlib.c \
-	$(BADDTLSTEST).c $(FATALERRTEST).c
+	$(BADDTLSTEST).c $(FATALERRTEST).c \
+	$(DSTUTEST).c
 
 EXHEADER= 
 HEADER=	testutil.h ssltestlib.h $(EXHEADER)
@@ -160,7 +164,8 @@ alltests: \
 	test_ss test_ca test_engine test_evp test_evp_extra test_ssl test_tsa test_ige \
 	test_jpake test_srp test_cms test_ocsp test_v3name test_heartbeat \
 	test_constant_time test_verify_extra test_clienthello test_sslv2conftest \
-	test_dtls test_bad_dtls test_fatalerr
+	test_dtls test_bad_dtls test_fatalerr \
+	test_dstu
 
 test_evp: $(EVPTEST)$(EXE_EXT) evptests.txt
 	../util/shlib_wrap.sh ./$(EVPTEST) evptests.txt
@@ -386,6 +391,9 @@ test_dtls: $(DTLSTEST)$(EXE_EXT)
 	@echo $(START) $@
 	../util/shlib_wrap.sh ./$(DTLSTEST) ../apps/server.pem ../apps/server.pem
 
+test_dstu: $(DSTUTEST)
+	../util/shlib_wrap.sh ./$(DSTUTEST)
+
 lint:
 	lint -DLINT $(INCLUDES) $(SRC)>fluff
 
@@ -505,6 +513,9 @@ $(RC5TEST)$(EXE_EXT): $(RC5TEST).o $(DLIBCRYPTO)
 
 $(DESTEST)$(EXE_EXT): $(DESTEST).o $(DLIBCRYPTO)
 	@target=$(DESTEST); $(BUILD_CMD)
+
+$(DSTUTEST)$(EXE_EXT): $(DSTUTEST).o $(DLIBCRYPTO)
+	@target=$(DSTUTEST); $(BUILD_CMD)
 
 $(RANDTEST)$(EXE_EXT): $(RANDTEST).o $(DLIBCRYPTO)
 	@target=$(RANDTEST); $(BUILD_CMD)

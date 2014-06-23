@@ -4316,6 +4316,7 @@ BIO_dgram_sctp_wait_for_dry             4679	EXIST::FUNCTION:SCTP
 BIO_s_datagram_sctp                     4680	EXIST::FUNCTION:DGRAM,SCTP
 BIO_dgram_is_sctp                       4681	EXIST::FUNCTION:SCTP
 BIO_dgram_sctp_notification_cb          4682	EXIST::FUNCTION:SCTP
+<<<<<<< HEAD
 i2d_DHxparams                           4683	EXIST::FUNCTION:DH
 EC_curve_nist2nid                       4684	EXIST::FUNCTION:EC
 DH_get_1024_160                         4685	EXIST::FUNCTION:DH
@@ -4431,3 +4432,4 @@ EVP_PKEY_meth_get_decrypt               4785	EXIST::FUNCTION:
 EVP_PKEY_meth_get_cleanup               4786	EXIST::FUNCTION:
 EVP_PKEY_meth_get_encrypt               4787	EXIST::FUNCTION:
 EVP_PKEY_meth_get_copy                  4788	EXIST::FUNCTION:
+ENGINE_load_dstu                        4789	EXIST::FUNCTION:DSTU,ENGINE,STATIC_ENGINE

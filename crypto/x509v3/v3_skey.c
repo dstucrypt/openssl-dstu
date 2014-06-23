@@ -106,6 +106,10 @@ static ASN1_OCTET_STRING *s2i_skey_id(X509V3_EXT_METHOD *method,
     ASN1_BIT_STRING *pk;
     unsigned char pkey_dig[EVP_MAX_MD_SIZE];
     unsigned int diglen;
+    EVP_MD_CTX md_ctx;
+    int pubkeynid = NID_undef;
+    EVP_PKEY *pkey = NULL;
+    X509_PUBKEY *pubkey = NULL;
 
     if (strcmp(str, "hash"))
         return s2i_ASN1_OCTET_STRING(method, ctx, str);
@@ -123,19 +127,37 @@ static ASN1_OCTET_STRING *s2i_skey_id(X509V3_EXT_METHOD *method,
         goto err;
     }
 
-    if (ctx->subject_req)
-        pk = ctx->subject_req->req_info->pubkey->public_key;
-    else
-        pk = ctx->subject_cert->cert_info->key->public_key;
+    if (ctx->subject_req) {
+        pubkeynid = OBJ_obj2nid(ctx->subject_req->req_info->pubkey->algor->algorithm);
+        pubkey = ctx->subject_req->req_info->pubkey;
+    }
+    else {
+        pubkeynid = OBJ_obj2nid(ctx->subject_cert->cert_info->key->algor->algorithm);
+        pubkey = ctx->subject_cert->cert_info->key;
+    }
+    pk = pubkey->public_key;
 
     if (!pk) {
         X509V3err(X509V3_F_S2I_SKEY_ID, X509V3_R_NO_PUBLIC_KEY);
         goto err;
     }
 
-    if (!EVP_Digest
-        (pk->data, pk->length, pkey_dig, &diglen, EVP_sha1(), NULL))
-        goto err;
+    if ((NID_dstu4145le == pubkeynid) || (NID_dstu4145be == pubkeynid)) {
+        pkey = X509_PUBKEY_get(pubkey);
+        if (!pkey) goto err;
+        EVP_MD_CTX_init(&md_ctx);
+        /* This is to make digest use s-box from public key if it is not the default one */
+        if (!EVP_DigestSignInit(&md_ctx, NULL, EVP_get_digestbynid(NID_dstu34311), NULL, pkey)) {
+            EVP_PKEY_free(pkey);
+            goto err;
+        }
+        EVP_PKEY_free(pkey);
+
+        if (!EVP_DigestUpdate(&md_ctx, pk->data, pk->length)) goto err;
+                    
+        if (!EVP_DigestFinal(&md_ctx, pkey_dig, &diglen)) goto err;
+    }
+    else if (!EVP_Digest(pk->data, pk->length, pkey_dig, &diglen, EVP_sha1(), NULL))goto err;
 
     if (!M_ASN1_OCTET_STRING_set(oct, pkey_dig, diglen)) {
         X509V3err(X509V3_F_S2I_SKEY_ID, ERR_R_MALLOC_FAILURE);

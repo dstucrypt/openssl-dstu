@@ -1056,6 +1056,7 @@ if (defined($disabled{"ec"}))
 	{
 	$disabled{"ecdsa"} = "forced";
 	$disabled{"ecdh"} = "forced";
+	$disabled{"dstu"} = "forced";
 	}
 
 # SSL 2.0 requires MD5 and RSA
@@ -1707,6 +1708,7 @@ while (<IN>)
 	$sdirs = 0 unless /\\$/;
         s/engines // if (/^DIRS=/ && $disabled{"engine"});
 	s/ccgost// if (/^ENGDIRS=/ && $disabled{"gost"});
+	s/uadstu// if (/^ENGDIRS=/ && $disabled{"dstu"});
 	s/^VERSION=.*/VERSION=$version/;
 	s/^MAJOR=.*/MAJOR=$major/;
 	s/^MINOR=.*/MINOR=$minor/;
