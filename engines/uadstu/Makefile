@@ -91,7 +91,7 @@ clean:
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
-dstu89.o: ../ccgost/gost89.c ../ccgost/gost89.h dstu89.c
+dstu89.o: ../ccgost/gost89.h dstu89.c
 dstu_ameth.o: ../../include/openssl/asn1.h ../../include/openssl/asn1t.h
 dstu_ameth.o: ../../include/openssl/bio.h ../../include/openssl/buffer.h
 dstu_ameth.o: ../../include/openssl/cms.h ../../include/openssl/crypto.h
