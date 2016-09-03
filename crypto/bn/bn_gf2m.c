@@ -1110,4 +1110,223 @@ int BN_GF2m_arr2poly(const int p[], BIGNUM *a)
 	return 1;
 	}
 
+#ifdef OPENSSL_FAST_EC2M
+
+
+/*********************************************************************************************
+ *	Functions for constant time BIGNUM implementations, kindly ignoring zero padding.
+ *********************************************************************************************/
+
+
+/* Expand BIGNUM 'a' to an element of constant size and set it zero.
+ * NOT constant time.
+ */
+int BN_GF2m_const_init(BIGNUM *a, int word_size)
+	{
+	int i;
+	BN_ULONG *ap;
+
+	/* Expand a */
+	if(bn_wexpand(a, word_size) == NULL) return 0;
+	a->top = word_size;
+
+	/* Set a to zero */
+	ap = a->d;
+	for(i=0; i < word_size; i++) ap[i] = 0;
+
+	return 1;
+	}
+
+/* Copy the value of 'b' to 'a' without destroying the length of both operands.
+ * 'a' must have at least the same number of words as 'b' and initialized with
+ * BN_GF2m_const_init to assert leading zero padding. Only constant time if
+ * length of 'a' equals length of 'b'.
+ */
+int BN_GF2m_copy(BIGNUM *a, const BIGNUM *b)
+	{
+	int i, ret=0;
+	BN_ULONG *ap,*bp;
+
+	if (b->top > a->top) goto err;
+
+	ap = a->d;
+	bp = b->d;
+	for(i=0; i < b->top; i++) ap[i] = bp[i];
+
+	ret = 1;
+
+err:
+	return ret;
+	}
+
+/* Copy the value of 'b' to 'a' for numbers with the same word length. */
+int BN_GF2m_const_copy(BIGNUM *a, const BIGNUM *b)
+	{
+	int i, ret=0;
+	BN_ULONG *ap,*bp;
+
+	if (a->top != b->top) goto err;
+	ap = a->d;
+	bp = b->d;
+
+	for(i=0; i < b->top; i++) ap[i] = bp[i];
+
+	ret = 1;
+
+err:
+	return ret;
+	}
+
+/* Computes z = a + b for integers with constant number of words.
+ * Does not correct zero padding. 'z' can be 'a' can be 'b'.
+ * Returns error if carry bit occurs at the topmost word.
+ */
+int BN_GF2m_const_int_add(BIGNUM *z, const BIGNUM *a, const BIGNUM *b)
+	{
+	int ret=0;
+	BN_ULONG *ap, *bp, *zp;
+
+	/* Assert constant size of elements */
+	if (a->top < 1) goto err;
+	if (a->top != b->top) goto err;
+	if (z->top != b->top) goto err;
+
+	ap = a->d;
+	bp = b->d;
+	zp = z->d;
+
+	/* Addition */
+	if (bn_add_words(zp, bp, ap, a->top)) goto err;
+
+	ret=1;
+
+err:
+	return ret;
+	}
+
+/* Does constant addition in GF2m without correcting zero padding.
+ * Computes z = a ^ b.
+ */
+int BN_GF2m_const_add(BIGNUM *z, const BIGNUM *a, const BIGNUM *b)
+	{
+	int i, ret=0;
+	BN_ULONG *ap, *bp, *zp;
+
+	/* Assert constant size of elements */
+	if (a->top != b->top) goto err;
+	if (z->top != b->top) goto err;
+
+	ap = a->d;
+	bp = b->d;
+	zp = z->d;
+
+	for(i=0; i < a->top; i++)
+		{
+		zp[i] = ap[i] ^ bp[i];
+		}
+
+	ret=1;
+
+err:
+	return ret;
+	}
+
+/* Compare value of 'a' to zero: Returns 1 if a equals zero. */
+int BN_GF2m_const_cmp_zero(const BIGNUM *a)
+	{
+	int i, ret=1;
+	BN_ULONG *ap;
+
+	ap = a->d;
+	for (i=0; i < a->top; i++)
+		{
+		if (ap[i] != 0) ret = 0;
+		}
+
+	return ret;
+	}
+
+/* Compare value of 'a' to one: Returns 1 if a equals one. */
+int BN_GF2m_const_cmp_one(const BIGNUM *a)
+	{
+	int i, ret=1;
+	BN_ULONG *ap;
+
+	ap = a->d;
+
+	if (ap[0] != 1) ret = 0;
+	for (i=1; i < a->top; i++)
+		{
+		if (ap[i] != 0) ret = 0;
+		}
+
+	return ret;
+	}
+
+/* Compare two field elements 'a' and 'b'.
+ * Returns
+ *
+ * 	1  if a equals b
+ * 	0  if a not equals b.
+ */
+int BN_GF2m_const_cmp_eq(const BIGNUM *a, const BIGNUM *b)
+	{
+	int i, ret=1;
+	BN_ULONG *ap,*bp;
+
+	if (a->top != b->top) goto err;
+
+	ap=a->d;
+	bp=b->d;
+	for (i=a->top-1; i>=0; i--)
+		{
+		if (ap[i] != bp[i]) ret = 0;
+		}
+
+err:
+	return ret;
+	}
+
+/* Set value of BIGNUM 'a' to one without destroying its length.
+ * 'a' must have at least one word.
+ */
+int BN_GF2m_const_setone(BIGNUM *a)
+	{
+	int i, ret=0;
+	BN_ULONG *ap;
+
+	if (a->top < 1) goto err;
+
+	ap = a->d;
+	ap[0] = 1;
+	for (i=1; i < a->top; i++) ap[i] = 0;
+
+	ret = 1;
+
+err:
+	return ret;
+	}
+
+
+/* Set all words of BIGNUM 'a' to 'b' without destroying its length.
+ * 'a' must have at least one word.
+ */
+int BN_GF2m_const_setword(BIGNUM *a, BN_ULONG b)
+	{
+	int i, ret=0;
+	BN_ULONG *ap;
+
+	if (a->top < 1) goto err;
+
+	ap = a->d;
+	for (i=0; i < a->top; i++) ap[i] = b;
+
+	ret = 1;
+
+err:
+	return ret;
+	}
+	
+#endif
+
 #endif

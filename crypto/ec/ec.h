@@ -178,6 +178,18 @@ const EC_METHOD *EC_GFp_nistp521_method(void);
  */
 const EC_METHOD *EC_GF2m_simple_method(void);
 
+/** Returns improved GF2m EC methods. Falls back to simple method
+ *  if no improved method is available.
+ *  \return  EC_METHOD object
+ */
+const EC_METHOD *EC_GF2m_nist163_method(void);
+const EC_METHOD *EC_GF2m_sect193_method(void);
+const EC_METHOD *EC_GF2m_nist233_method(void);
+const EC_METHOD *EC_GF2m_sect239_method(void);
+const EC_METHOD *EC_GF2m_nist283_method(void);
+const EC_METHOD *EC_GF2m_nist409_method(void);
+const EC_METHOD *EC_GF2m_nist571_method(void);
+
 #endif
 
 

@@ -678,6 +678,81 @@ int	BN_GF2m_mod_solve_quad_arr(BIGNUM *r, const BIGNUM *a,
 int	BN_GF2m_poly2arr(const BIGNUM *a, int p[], int max);
 int	BN_GF2m_arr2poly(const int p[], BIGNUM *a);
 
+
+/*
+ * Acceleration for NIST/SECT CHAR2 curves 163, 193, 233, 239, 283, 409 and 571 bit
+ * using Intel SSE (Compiler Intrinsics) and PCLMUL.
+ *
+ */
+#ifdef OPENSSL_FAST_EC2M
+
+/* Functions for binary field arithmetic to allow constant sizes of BIGNUM. */
+int BN_GF2m_const_init(BIGNUM *a, int word_size);
+int BN_GF2m_copy(BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_const_int_add(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_const_add(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_const_and(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_const_cmp_zero(const BIGNUM *a);
+int BN_GF2m_const_cmp_one(const BIGNUM *a);
+int BN_GF2m_const_cmp_eq(const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_const_copy(BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_const_setone(BIGNUM *a);
+int BN_GF2m_const_setword(BIGNUM *a, BN_ULONG b);
+int BN_GF2m_const_setmask(BIGNUM *a, BIGNUM *b, int k);
+
+/* Fast implementation of field arithmetic's */
+int BN_GF2m_sqr_xmm_nist163(BIGNUM *z, const BIGNUM *a);
+int BN_GF2m_sqr_xmm_sect193(BIGNUM *z, const BIGNUM *a);
+int BN_GF2m_sqr_xmm_nist233(BIGNUM *z, const BIGNUM *a);
+int BN_GF2m_sqr_xmm_sect239(BIGNUM *z, const BIGNUM *a);
+int BN_GF2m_sqr_xmm_nist283(BIGNUM *z, const BIGNUM *a);
+int BN_GF2m_sqr_xmm_nist409(BIGNUM *z, const BIGNUM *a);
+int BN_GF2m_sqr_xmm_nist571(BIGNUM *z, const BIGNUM *a);
+
+int BN_GF2m_mul_xmm_nist163(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_mul_xmm_sect193(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_mul_xmm_nist233(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_mul_xmm_sect239(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_mul_xmm_nist283(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_mul_xmm_nist409(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_mul_xmm_nist571(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+
+int BN_GF2m_div_xmm_nist163(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_div_xmm_sect193(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_div_xmm_nist233(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_div_xmm_sect239(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_div_xmm_nist283(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_div_xmm_nist409(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+int BN_GF2m_div_xmm_nist571(BIGNUM *z, const BIGNUM *a, const BIGNUM *b);
+
+/* Fast implementation of Madd&Mdouble for EC Montgomery multiplication */
+int BN_GF2m_Maddle_xmm_nist163k(const BIGNUM *x, BIGNUM *x1, BIGNUM *z1,
+								const BIGNUM *x2, const BIGNUM *z2, BN_ULONG k);
+int BN_GF2m_Maddle_xmm_nist163r(const BIGNUM *x, BIGNUM *x1, BIGNUM *z1,
+								const BIGNUM *x2, const BIGNUM *z2, BN_ULONG k, const BIGNUM *c);
+int BN_GF2m_Maddle_xmm_sect193r(const BIGNUM *x, BIGNUM *x1, BIGNUM *z1,
+								const BIGNUM *x2, const BIGNUM *z2, BN_ULONG k, const BIGNUM *c);
+int BN_GF2m_Maddle_xmm_nist233k(const BIGNUM *x, BIGNUM *x1, BIGNUM *z1,
+								const BIGNUM *x2, const BIGNUM *z2, BN_ULONG k);
+int BN_GF2m_Maddle_xmm_nist233r(const BIGNUM *x, BIGNUM *x1, BIGNUM *z1,
+								const BIGNUM *x2, const BIGNUM *z2, BN_ULONG k, const BIGNUM *c);
+int BN_GF2m_Maddle_xmm_sect239k(const BIGNUM *x, BIGNUM *x1, BIGNUM *z1,
+								const BIGNUM *x2, const BIGNUM *z2, BN_ULONG k);
+int BN_GF2m_Maddle_xmm_nist283k(const BIGNUM *x, BIGNUM *x1, BIGNUM *z1,
+								const BIGNUM *x2, const BIGNUM *z2, BN_ULONG k);
+int BN_GF2m_Maddle_xmm_nist283r(const BIGNUM *x, BIGNUM *x1, BIGNUM *z1,
+								const BIGNUM *x2, const BIGNUM *z2, BN_ULONG k, const BIGNUM *c);
+int BN_GF2m_Maddle_xmm_nist409k(const BIGNUM *x, BIGNUM *x1, BIGNUM *z1,
+								const BIGNUM *x2, const BIGNUM *z2, BN_ULONG k);
+int BN_GF2m_Maddle_xmm_nist409r(const BIGNUM *x, BIGNUM *x1, BIGNUM *z1,
+								const BIGNUM *x2, const BIGNUM *z2, BN_ULONG k, const BIGNUM *c);
+int BN_GF2m_Maddle_xmm_nist571k(const BIGNUM *x, BIGNUM *x1, BIGNUM *z1,
+								const BIGNUM *x2, const BIGNUM *z2, BN_ULONG k);
+int BN_GF2m_Maddle_xmm_nist571r(const BIGNUM *x, BIGNUM *x1, BIGNUM *z1,
+								const BIGNUM *x2, const BIGNUM *z2, BN_ULONG k, const BIGNUM *c);
+
+#endif
+
 #endif
 
 /* faster mod functions for the 'NIST primes' 

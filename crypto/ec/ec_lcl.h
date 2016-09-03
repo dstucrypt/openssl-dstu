@@ -391,6 +391,57 @@ int ec_GF2m_simple_field_mul(const EC_GROUP *, BIGNUM *r, const BIGNUM *a, const
 int ec_GF2m_simple_field_sqr(const EC_GROUP *, BIGNUM *r, const BIGNUM *a, BN_CTX *);
 int ec_GF2m_simple_field_div(const EC_GROUP *, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *);
 
+#ifdef OPENSSL_FAST_EC2M
+
+/* method functions in ec2_mult_nist.c */
+int ec_GF2m_nist_mul(const EC_GROUP *group, EC_POINT *r, const BIGNUM *scalar, size_t num,
+					 const EC_POINT *points[], const BIGNUM *scalars[], BN_CTX *ctx);
+
+/* method functions in ec2_nist.c */
+int ec_GF2m_nist_group_copy(EC_GROUP *dest, const EC_GROUP *src);
+int ec_GF2m_nist_group_set_curve(EC_GROUP *group, const BIGNUM *p, const BIGNUM *a,
+								 const BIGNUM *b, BN_CTX *ctx);
+int ec_GF2m_nist_point_copy(EC_POINT *dest, const EC_POINT *src);
+int ec_GF2m_nist_point_set_to_infinity(const EC_GROUP *group, EC_POINT *point);
+int ec_GF2m_nist_point_set_affine_coordinates(const EC_GROUP *group, EC_POINT *point,
+											  const BIGNUM *x, const BIGNUM *y, BN_CTX *ctx);
+int ec_GF2m_nist_point_get_affine_coordinates(const EC_GROUP *group, const EC_POINT *point,
+											  BIGNUM *x, BIGNUM *y, BN_CTX *ctx);
+int ec_GF2m_nist_add(const EC_GROUP *group, EC_POINT *r, const EC_POINT *a, const EC_POINT *b, BN_CTX *ctx);
+int ec_GF2m_nist_dbl(const EC_GROUP *group, EC_POINT *r, const EC_POINT *a, BN_CTX *ctx);
+int ec_GF2m_nist_invert(const EC_GROUP *group, EC_POINT *point, BN_CTX *ctx);
+int ec_GF2m_nist_is_at_infinity(const EC_GROUP *group, const EC_POINT *point);
+int ec_GF2m_nist_is_on_curve(const EC_GROUP *group, const EC_POINT *point, BN_CTX *ctx);
+int ec_GF2m_nist_cmp(const EC_GROUP *group, const EC_POINT *a, const EC_POINT *b, BN_CTX *ctx);
+int ec_GF2m_nist_make_affine(const EC_GROUP *group, EC_POINT *point, BN_CTX *ctx);
+int ec_GF2m_nist_points_make_affine(const EC_GROUP *group, size_t num, EC_POINT *points[], BN_CTX *ctx);
+
+int ec_GF2m_nist163_field_mul(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
+int ec_GF2m_nist163_field_sqr(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, BN_CTX *ctx);
+int ec_GF2m_nist163_field_div(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
+int ec_GF2m_sect193_field_mul(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
+int ec_GF2m_sect193_field_sqr(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, BN_CTX *ctx);
+int ec_GF2m_sect193_field_div(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
+int ec_GF2m_nist233_field_mul(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
+int ec_GF2m_nist233_field_sqr(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, BN_CTX *ctx);
+int ec_GF2m_nist233_field_div(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
+int ec_GF2m_sect239_field_mul(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
+int ec_GF2m_sect239_field_sqr(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, BN_CTX *ctx);
+int ec_GF2m_sect239_field_div(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
+int ec_GF2m_nist283_field_mul(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
+int ec_GF2m_nist283_field_sqr(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, BN_CTX *ctx);
+int ec_GF2m_nist283_field_div(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
+int ec_GF2m_nist409_field_mul(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
+int ec_GF2m_nist409_field_sqr(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, BN_CTX *ctx);
+int ec_GF2m_nist409_field_div(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
+int ec_GF2m_nist571_field_mul(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
+int ec_GF2m_nist571_field_sqr(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, BN_CTX *ctx);
+int ec_GF2m_nist571_field_div(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
+
+/* method to load precomputations for montgomery multiplication, in ec2_prec.c */
+const BIGNUM *ec_GF2m_get_sqrt_b(const EC_GROUP *group);
+
+#endif
 
 /* method functions in ec2_mult.c */
 int ec_GF2m_simple_mul(const EC_GROUP *group, EC_POINT *r, const BIGNUM *scalar,
