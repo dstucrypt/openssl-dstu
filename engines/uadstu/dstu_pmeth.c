@@ -345,11 +345,10 @@ static int dstu_pkey_verify(EVP_PKEY_CTX *ctx, const unsigned char *sig,
 
     field_size = BN_num_bytes(n);
 
-    if (!d2i_ASN1_OCTET_STRING(&dstu_sig, &sig, siglen))
-	goto err;
-
-    sig = ASN1_STRING_data(dstu_sig);
-    siglen = ASN1_STRING_length(dstu_sig);
+    if (d2i_ASN1_OCTET_STRING(&dstu_sig, &sig, siglen)) {
+        sig = ASN1_STRING_data(dstu_sig);
+        siglen = ASN1_STRING_length(dstu_sig);
+    }
 
     if (siglen & 0x01)
 	goto err;

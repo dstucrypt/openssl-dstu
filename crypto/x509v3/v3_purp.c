@@ -323,6 +323,7 @@ int X509_supported_extension(X509_EXTENSION *ex)
         NID_certificate_policies, /* 89 */
         NID_crl_distribution_points, /* 103 */
         NID_ext_key_usage,      /* 126 */
+		NID_qcStatements, /* 286 */
 #ifndef OPENSSL_NO_RFC3779
         NID_sbgp_ipAddrBlock,   /* 290 */
         NID_sbgp_autonomousSysNum, /* 291 */
