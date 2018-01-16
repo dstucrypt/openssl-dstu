@@ -79,6 +79,9 @@ static int dstu_md_cleanup(EVP_MD_CTX *ctx)
 
 static int dstu_md_ctrl(EVP_MD_CTX *ctx, int cmd, int p1, void *p2)
     {
+    if (!ctx) {
+        return 0;
+    }
     gost_subst_block sbox;
     struct dstu_digest_ctx *c = ctx->md_data;
 
