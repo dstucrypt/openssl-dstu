@@ -1,3 +1,8 @@
+ ARCHIVE NOTICE
+ --------------
+
+ This version is outdated and should not be used. 
+ For DSTU cyphers support, take a look at https://github.com/dstucrypt/dstu-engine
 
  OpenSSL 1.1.0-dev
 
